@@ -3,148 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Screencast Local P2P</title>
+    <title>Monitor Remoto P2P</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .status-dot {
-            height: 10px;
-            width: 10px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-    </style>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
-<body class="bg-slate-900 text-white font-sans min-h-screen flex flex-col">
+<body class="bg-slate-900 text-white font-sans min-h-screen">
 
-    <header class="p-4 border-b border-slate-700 bg-slate-800 flex justify-between items-center">
-        <h1 class="text-xl font-bold">Monitor Remoto Web</h1>
-        <div id="connectionStatus" class="flex items-center gap-2 text-sm">
-            <span class="status-dot bg-red-500"></span>
-            Desconectado
-        </div>
+    <header class="p-4 bg-slate-800 border-b border-slate-700 flex justify-between items-center">
+        <h1 class="font-bold text-lg">Monitor Remoto</h1>
+        <div id="status" class="text-xs bg-red-900 px-2 py-1 rounded">Desconectado</div>
     </header>
 
-    <main class="flex-1 p-4 flex flex-col gap-4 max-w-4xl mx-auto w-full">
+    <main class="p-4 max-w-lg mx-auto space-y-6">
         
-        <!-- Panel de Control -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
-            <!-- Celular EMISOR (El que tiene la pantalla rota o falla) -->
-            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
-                <h2 class="text-lg font-semibold mb-2">1. Celular Emisor</h2>
-                <p class="text-slate-400 text-sm mb-4">El celular que quieres transmitir debe pulsar aquí:</p>
-                <button id="startShare" class="w-full bg-blue-600 hover:bg-blue-700 p-3 rounded-lg font-bold transition">
-                    Compartir Pantalla
-                </button>
-                <div id="offerContainer" class="mt-4 hidden">
-                    <p class="text-xs text-yellow-400 mb-1">Copia este código y pégalo en el otro celular:</p>
-                    <textarea id="localOffer" readonly class="w-full bg-black p-2 text-[10px] h-20 rounded border border-slate-600 text-green-400"></textarea>
-                    <button id="copyOffer" class="mt-2 text-xs bg-slate-600 p-1 rounded">Copiar código</button>
-                </div>
+        <!-- Tu ID -->
+        <div class="bg-slate-800 p-4 rounded-lg">
+            <p class="text-sm text-slate-400">Tu ID de conexión:</p>
+            <div class="flex items-center gap-2">
+                <code id="my-id" class="text-xl font-mono text-yellow-400 font-bold">Cargando...</code>
+                <button id="copy-id" class="text-[10px] bg-slate-700 px-2 py-1 rounded">Copiar</button>
             </div>
-
-            <!-- Celular RECEPTOR (El que usas para ver) -->
-            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
-                <h2 class="text-lg font-semibold mb-2">2. Celular Receptor</h2>
-                <p class="text-slate-400 text-sm mb-4">Pega el código del otro celular aquí:</p>
-                <textarea id="remoteOffer" placeholder="Pega el código aquí..." class="w-full bg-black p-2 text-[10px] h-20 rounded border border-slate-600 text-green-400"></textarea>
-                <button id="connectBtn" class="w-full mt-2 bg-green-600 hover:bg-green-700 p-3 rounded-lg font-bold transition">
-                    Conectar y Ver
-                </button>
-            </div>
-
         </div>
 
-        <!-- Área de Video -->
-        <div class="relative flex-1 bg-black rounded-xl overflow-hidden border border-slate-700 flex items-center justify-center min-h-[300px]">
-            <video id="remoteVideo" autoplay playsinline class="w-full h-full object-contain"></video>
-            <div id="videoPlaceholder" class="absolute text-slate-500 flex flex-col items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <span>Esperando señal...</span>
-            </div>
+        <!-- EMISOR: Celular Roto -->
+        <div class="border-2 border-dashed border-blue-500/30 p-4 rounded-xl">
+            <h2 class="text-blue-400 font-bold mb-2 uppercase text-xs">Paso A: Celular con pantalla rota</h2>
+            <p class="text-sm text-slate-400 mb-3">Pulsa para empezar a transmitir tu pantalla.</p>
+            <button id="btn-share" class="w-full bg-blue-600 p-3 rounded-lg font-bold active:scale-95 transition">
+                Transmitir Pantalla
+            </button>
+        </div>
+
+        <!-- RECEPTOR: Celular Sano -->
+        <div class="border-2 border-dashed border-green-500/30 p-4 rounded-xl">
+            <h2 class="text-green-400 font-bold mb-2 uppercase text-xs">Paso B: Celular sano (Monitor)</h2>
+            <p class="text-sm text-slate-400 mb-3">Escribe el ID del celular roto para ver su pantalla.</p>
+            <input id="remote-id" type="text" placeholder="ID del otro celular" class="w-full bg-black p-3 rounded-lg mb-2 text-center font-mono border border-slate-700">
+            <button id="btn-connect" class="w-full bg-green-600 p-3 rounded-lg font-bold active:scale-95 transition">
+                Conectar y Ver
+            </button>
+        </div>
+
+        <!-- Visualización -->
+        <div class="bg-black rounded-lg aspect-video overflow-hidden border border-slate-700 flex items-center justify-center relative">
+            <video id="video-display" autoplay playsinline class="w-full h-full object-contain"></video>
+            <div id="loading-msg" class="absolute text-slate-600 text-sm">Esperando video...</div>
         </div>
 
     </main>
 
     <script>
-        const pc = new RTCPeerConnection({
-            iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+        // Inicializar PeerJS
+        const peer = new Peer();
+        const myIdEl = document.getElementById('my-id');
+        const statusEl = document.getElementById('status');
+        const videoDisplay = document.getElementById('video-display');
+        const loadingMsg = document.getElementById('loading-msg');
+
+        // Mostrar mi ID al conectar con el servidor
+        peer.on('open', (id) => {
+            myIdEl.innerText = id;
+            statusEl.innerText = "Listo";
+            statusEl.className = "text-xs bg-blue-900 px-2 py-1 rounded";
         });
 
-        const startBtn = document.getElementById('startShare');
-        const connectBtn = document.getElementById('connectBtn');
-        const localOfferTxt = document.getElementById('localOffer');
-        const remoteOfferTxt = document.getElementById('remoteOffer');
-        const remoteVideo = document.getElementById('remoteVideo');
-        const statusDot = document.querySelector('.status-dot');
-        const statusText = document.getElementById('connectionStatus');
-
-        // --- LÓGICA EMISOR ---
-        startBtn.onclick = async () => {
+        // Lógica del EMISOR (Celular Roto)
+        document.getElementById('btn-share').onclick = async () => {
             try {
-                const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-                stream.getTracks().forEach(track => pc.addTrack(track, stream));
+                // NOTA: En Android, esto funcionará mejor si el archivo se sirve vía HTTPS
+                const stream = await navigator.mediaDevices.getDisplayMedia({ 
+                    video: { cursor: "always" },
+                    audio: false 
+                });
                 
-                const offer = await pc.createOffer();
-                await pc.setLocalDescription(offer);
+                // Escuchamos llamadas entrantes (del receptor)
+                peer.on('call', (call) => {
+                    call.answer(stream); // Enviamos nuestro video
+                    statusEl.innerText = "Transmitiendo...";
+                    statusEl.className = "text-xs bg-green-900 px-2 py-1 rounded";
+                });
 
-                // Esperamos un momento para que ICE recoja candidatos
-                setTimeout(() => {
-                    localOfferTxt.value = btoa(JSON.stringify(pc.localDescription));
-                    document.getElementById('offerContainer').classList.remove('hidden');
-                    startBtn.innerText = "Transmitiendo...";
-                    startBtn.disabled = true;
-                }, 1000);
+                alert("ID activado para transmisión. Ahora ve al celular sano e ingresa este ID.");
+                
             } catch (err) {
-                console.error("Error capturando pantalla:", err);
-                alert("Tu navegador no soporta captura de pantalla o se canceló.");
+                console.error(err);
+                alert("Error: Para usar capturar pantalla en Android, el navegador requiere que el sitio esté en una dirección HTTPS segura. Intenta subir este archivo a un servidor o usar un servicio de hosting gratuito.");
             }
         };
 
-        // --- LÓGICA RECEPTOR ---
-        connectBtn.onclick = async () => {
-            const rawData = remoteOfferTxt.value.trim();
-            if (!rawData) return alert("Pega el código primero");
+        // Lógica del RECEPTOR (Celular Sano)
+        document.getElementById('btn-connect').onclick = () => {
+            const remoteId = document.getElementById('remote-id').value;
+            if (!remoteId) return alert("Ingresa un ID");
 
-            try {
-                const remoteDesc = new RTCSessionDescription(JSON.parse(atob(rawData)));
-                await pc.setRemoteDescription(remoteDesc);
-
-                if (remoteDesc.type === 'offer') {
-                    const answer = await pc.createAnswer();
-                    await pc.setLocalDescription(answer);
-                    localOfferTxt.value = btoa(JSON.stringify(pc.localDescription));
-                    document.getElementById('offerContainer').classList.remove('hidden');
-                    alert("Ahora copia el NUEVO código generado abajo y pégalo de vuelta en el primer celular (si es necesario) o espera la conexión.");
-                }
-            } catch (err) {
-                console.error("Error al conectar:", err);
-                alert("Código inválido.");
-            }
+            // Llamamos al emisor (pero el emisor es quien tiene el video)
+            // En PeerJS la lógica de flujo de video puede ser inversa
+            const call = peer.call(remoteId, null); 
+            
+            call.on('stream', (remoteStream) => {
+                videoDisplay.srcObject = remoteStream;
+                loadingMsg.classList.add('hidden');
+                statusEl.innerText = "Recibiendo Video";
+                statusEl.className = "text-xs bg-green-900 px-2 py-1 rounded";
+            });
         };
 
-        // Manejo de la conexión
-        pc.ontrack = (event) => {
-            remoteVideo.srcObject = event.streams[0];
-            document.getElementById('videoPlaceholder').classList.add('hidden');
-            statusDot.classList.replace('bg-red-500', 'bg-green-500');
-            statusText.innerHTML = `<span class="status-dot bg-green-500"></span> En Vivo`;
+        // Copiar ID
+        document.getElementById('copy-id').onclick = () => {
+            navigator.clipboard.writeText(myIdEl.innerText);
         };
-
-        pc.oniceconnectionstatechange = () => {
-            if (pc.iceConnectionState === 'connected') {
-                console.log("¡Conectado!");
-            }
-        };
-
-        document.getElementById('copyOffer').onclick = () => {
-            localOfferTxt.select();
-            document.execCommand('copy');
-            alert("Código copiado al portapapeles");
-        };
-
     </script>
 </body>
 </html>
