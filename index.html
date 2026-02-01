@@ -3,347 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fragmentos de Invierno</title>
+    <title>Declaración Final</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            /* Paleta extraída de tus imágenes "Romance Frío" */
-            --col-bg-dark: #153548;      /* Azul profundo (Imagen 2) */
-            --col-bg-panel: #1A545D;     /* Teal oscuro (Imagen 2) */
-            --col-accent-cold: #9AE8B7;  /* Menta helado (Imagen 2 - Texto) */
-            --col-accent-love: #F55654;  /* Rosa rojizo (Imagen 3 - Corazón) */
-            --col-text-dim: #817063;     /* Taupe (Imagen 2 - Detalles) */
-            --col-shadow: #0a1a24;       /* Sombra profunda */
-            
-            --pixel-size: 4px;
+            /* Paleta extraída de tus imágenes */
+            --c-bg-deep: #153548;    /* Fondo Profundo (Frío) */
+            --c-bg-panel: #1A545D;   /* Paneles (Teal Oscuro) */
+            --c-accent-love: #C61B24; /* Rojo/Rosa Apagado (Amor triste) */
+            --c-text-mint: #9AE8B7;  /* Verde Menta (Luz fría) */
+            --c-text-dim: #605056;   /* Púrpura grisáceo (Detalles) */
+            --c-shadow: #0a131a;     /* Sombra negra azulada */
         }
 
         body {
-            background-color: var(--col-bg-dark);
+            background-color: var(--c-bg-deep);
             font-family: 'VT323', monospace;
             margin: 0;
             height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             overflow: hidden;
-            color: var(--col-accent-cold);
-            position: relative;
+            color: var(--c-text-mint);
+            user-select: none;
         }
 
-        /* --- Efectos Ambientales --- */
+        /* Efecto CRT (Pantalla antigua) */
         .scanlines {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 10;
-        }
-        
-        .vignette {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 50%, black 150%);
-            pointer-events: none;
-            z-index: 9;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none; z-index: 99;
         }
 
-        /* --- Componentes Pixel Art --- */
+        /* Contenedores Pixel Art */
         .pixel-card {
-            background-color: var(--col-bg-panel);
+            background: var(--c-bg-panel);
+            border: 4px solid var(--c-shadow);
             padding: 2rem;
-            max-width: 400px;
-            width: 90%;
-            position: relative;
+            width: 90%; max-width: 350px;
             text-align: center;
-            /* Sombras duras para efecto pixel 3D */
+            position: relative;
             box-shadow: 
-                -4px 0 0 0 var(--col-shadow),
-                4px 0 0 0 var(--col-shadow),
-                0 -4px 0 0 var(--col-shadow),
-                0 4px 0 0 var(--col-shadow),
-                8px 8px 0 0 rgba(0,0,0,0.5);
+                inset 0 0 0 4px var(--c-bg-deep),
+                8px 8px 0px var(--c-shadow);
         }
 
-        .pixel-heart {
-            color: var(--col-accent-love);
-            font-size: 3rem;
-            text-shadow: 4px 4px 0px var(--col-shadow);
-            animation: beat 3s infinite ease-in-out;
-            margin-bottom: 1rem;
+        .icon-heart {
+            font-size: 40px; color: var(--c-accent-love);
+            text-shadow: 2px 2px var(--c-shadow);
+            margin-bottom: 10px;
             display: inline-block;
+            animation: beat 3s infinite ease-in-out;
         }
 
-        h1 {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 1.2rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-            color: var(--col-accent-cold);
-            text-shadow: 2px 2px 0px var(--col-shadow);
-        }
+        @keyframes beat { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } }
 
-        p {
-            font-size: 1.4rem;
-            color: #d1e8e6;
-            margin-bottom: 2rem;
-        }
+        h1 { font-family: 'Press Start 2P', cursive; font-size: 16px; line-height: 1.5; margin-bottom: 1.5rem; color: #fff; text-shadow: 2px 2px var(--c-shadow); }
+        p { font-size: 1.2rem; color: var(--c-text-mint); margin-bottom: 2rem; }
 
-        /* --- Inputs y Botones --- */
+        /* Inputs y Botones */
         .pixel-input {
-            width: 80%;
-            background: var(--col-bg-dark);
-            border: 2px solid var(--col-text-dim);
-            color: var(--col-accent-love);
+            background: var(--c-shadow);
+            border: 2px solid var(--c-text-dim);
+            color: var(--c-accent-love);
             font-family: 'Press Start 2P', cursive;
-            font-size: 0.8rem;
+            font-size: 12px;
             padding: 15px;
+            width: 75%;
             text-align: center;
             outline: none;
-            margin-bottom: 15px;
-            box-shadow: inset 4px 4px 0px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+            text-transform: uppercase;
         }
-        
-        .pixel-input::placeholder { color: #354c57; }
+        .pixel-input:focus { border-color: var(--c-accent-love); }
 
         .pixel-btn {
-            background-color: var(--col-accent-love);
-            color: var(--col-bg-dark);
+            background: var(--c-accent-love);
+            color: #fff;
             border: none;
-            padding: 15px 30px;
             font-family: 'Press Start 2P', cursive;
-            font-size: 0.8rem;
+            font-size: 10px;
+            padding: 15px 25px;
             cursor: pointer;
             box-shadow: 
-                inset 4px 4px 0px rgba(255,255,255,0.3),
-                inset -4px -4px 0px rgba(0,0,0,0.3),
-                4px 4px 0px var(--col-shadow);
+                inset 2px 2px 0px rgba(255,255,255,0.3),
+                inset -2px -2px 0px rgba(0,0,0,0.3),
+                4px 4px 0px var(--c-shadow);
             transition: transform 0.1s;
         }
-
-        .pixel-btn:active {
-            transform: translate(4px, 4px);
-            box-shadow: none;
-        }
-
-        .btn-secondary {
-            background-color: var(--col-text-dim);
-            color: white;
-            font-size: 0.6rem;
-            padding: 10px;
-        }
-
-        /* --- Panel de Admin (Oculto) --- */
-        #admin-panel {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 100;
-            border: 4px solid var(--col-accent-love);
-            background-color: black;
-            display: none; /* Se activa con JS */
-        }
-
-        .admin-trigger {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            opacity: 0.3;
-            font-family: 'Press Start 2P';
-            font-size: 10px;
-            cursor: pointer;
-            color: var(--col-text-dim);
-        }
-        .admin-trigger:hover { opacity: 1; }
-
-        .key-list {
-            list-style: none;
-            padding: 0;
-            max-height: 100px;
-            overflow-y: auto;
-            text-align: left;
-            border: 2px dashed var(--col-text-dim);
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 1.2rem;
-        }
-        .key-item { color: var(--col-accent-cold); margin-bottom: 5px; }
-
-        /* --- Animaciones --- */
-        @keyframes beat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
+        .pixel-btn:active { transform: translate(4px, 4px); box-shadow: none; }
         
-        .error-msg { color: var(--col-accent-love); font-size: 1.2rem; margin-top: 10px; min-height: 1.5rem;}
-        .success-msg { color: var(--col-accent-cold); font-size: 1.2rem; margin-top: 10px; min-height: 1.5rem;}
+        .btn-small { padding: 8px 10px; font-size: 8px; margin-top: 10px; background: var(--c-text-dim); }
 
+        /* Utilidades */
         .hidden { display: none !important; }
+        .error-msg { color: var(--c-accent-love); margin-top: 15px; font-size: 14px; min-height: 20px; }
+        
+        /* Panel Admin */
+        #admin-panel {
+            display: none; position: absolute; z-index: 50;
+            background: #000; border: 2px solid var(--c-accent-love);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            padding: 20px; width: 300px;
+        }
+        .admin-trigger { position: fixed; bottom: 10px; right: 10px; opacity: 0.3; cursor: pointer; font-size: 20px; }
+        .key-list { text-align: left; font-size: 14px; max-height: 100px; overflow-y: auto; margin: 15px 0; border: 1px dashed var(--c-text-dim); padding: 5px; }
     </style>
 </head>
 <body>
 
     <div class="scanlines"></div>
-    <div class="vignette"></div>
 
-    <main class="pixel-card" id="login-card">
-        <div class="pixel-heart">❤</div>
-        <h1>SOLO UNA VEZ<br>PUEDES ENTRAR</h1>
-        <p>El invierno guarda secretos.<br>Introduce tu llave única.</p>
+    <main class="pixel-card" id="view-login">
+        <div class="icon-heart">❤</div>
+        <h1>FRAGMENTOS<br>DE INVIERNO</h1>
+        <p>Una llave, un uso.<br>Introduce el código.</p>
         
-        <input type="text" id="user-key" class="pixel-input" placeholder="XXXX-XXXX" maxlength="10">
-        <br>
-        <button class="pixel-btn" onclick="tryLogin()">ABRIR PORTAL</button>
+        <input type="text" id="user-key-input" class="pixel-input" placeholder="XXXX" maxlength="10">
+        <button class="pixel-btn" id="btn-enter">ENTRAR</button>
         
         <div id="login-msg" class="error-msg"></div>
     </main>
 
-    <main class="pixel-card hidden" id="content-card">
-        <div class="pixel-heart" style="color:var(--col-accent-cold)">❄</div>
+    <main class="pixel-card hidden" id="view-content">
+        <div class="icon-heart" style="color: var(--c-text-mint);">❄</div>
         <h1>ACCESO CONCEDIDO</h1>
-        <p>Esta llave se ha roto para siempre.<br>Bienvenido al recuerdo.</p>
-        <div style="border: 2px dashed var(--col-accent-love); padding: 20px; margin-top:20px;">
-            <p style="color: white; margin:0;">
-                "Aquí iría tu carta, tu foto o el siguiente paso de tu página web..."
-            </p>
+        <p>"La llave se ha roto tras su uso.<br>Bienvenido al recuerdo."</p>
+        
+        <div style="border: 2px dashed var(--c-accent-love); padding: 15px;">
+            <p style="color: #fff; font-size: 14px;">(Aquí irá la siguiente fase de tu página)</p>
         </div>
     </main>
 
-    <div class="admin-trigger" onclick="toggleAdmin()">[ ⚙ ]</div>
+    <div class="admin-trigger" id="btn-open-admin">⚙</div>
 
-    <div id="admin-panel" class="pixel-card">
-        <h1 style="color:var(--col-accent-love)">ZONA DE CONTROL</h1>
+    <div id="admin-panel">
+        <h2 style="font-family:'Press Start 2P'; font-size:12px; color:var(--c-accent-love); margin-bottom:20px;">PANEL MAESTRO</h2>
         
-        <div id="admin-login-view">
-            <p>Contraseña Maestra:</p>
-            <input type="password" id="admin-pass" class="pixel-input">
-            <button class="pixel-btn btn-secondary" onclick="checkAdminPass()">ENTRAR</button>
+        <div id="admin-auth-view">
+            <input type="password" id="admin-pass-input" class="pixel-input" placeholder="CLAVE MAESTRA">
+            <button class="pixel-btn" id="btn-admin-login">ACCEDER</button>
         </div>
 
-        <div id="admin-controls-view" class="hidden">
-            <p>Generar Llave Única:</p>
-            <button class="pixel-btn" onclick="generateKey()">CREAR LLAVE</button>
-            <ul id="key-display" class="key-list">
-                </ul>
-            <button class="pixel-btn btn-secondary" onclick="toggleAdmin()">CERRAR</button>
+        <div id="admin-tools-view" class="hidden">
+            <button class="pixel-btn" id="btn-generate">GENERAR LLAVE</button>
+            <div id="keys-display" class="key-list">Cargando llaves...</div>
+            <button class="pixel-btn btn-small" id="btn-close-admin">CERRAR</button>
         </div>
     </div>
 
-    <script>
-        // --- CONFIGURACIÓN ---
-        const DB_NAME = "romance_frio_db_v1";
-        const ADMIN_PASSWORD = "AMOR_FRIO"; // <--- CAMBIA ESTO SI QUIERES
+    <script type="module">
+        // 4.1 IMPORTAR FUNCIONES NECESARIAS
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+        import { getDatabase, ref, set, update, get, onValue } 
+            from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
 
-        // --- REFERENCIAS DOM ---
-        const userKeyInput = document.getElementById('user-key');
-        const loginMsg = document.getElementById('login-msg');
-        const loginCard = document.getElementById('login-card');
-        const contentCard = document.getElementById('content-card');
-        
-        const adminPanel = document.getElementById('admin-panel');
-        const adminPassInput = document.getElementById('admin-pass');
-        const adminLoginView = document.getElementById('admin-login-view');
-        const adminControlsView = document.getElementById('admin-controls-view');
-        const keyDisplayList = document.getElementById('key-display');
-
-        // --- SISTEMA DE BASE DE DATOS (LocalStorage) ---
-        // Iniciamos la "Base de datos" si no existe
-        let db = JSON.parse(localStorage.getItem(DB_NAME)) || {
-            activeKeys: [], // Llaves que funcionan
-            usedKeys: []    // Llaves ya gastadas
+        // 4.2 TU CONFIGURACIÓN (INTEGRADA)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAnYkdRY_LhrJwpClgfWs38iP2mfxyc2tk",
+            authDomain: "declaracion-final.firebaseapp.com",
+            projectId: "declaracion-final",
+            storageBucket: "declaracion-final.firebasestorage.app",
+            messagingSenderId: "288671326547",
+            appId: "1:288671326547:web:e549d8d79e951e408e41a6"
         };
 
-        function saveDB() {
-            localStorage.setItem(DB_NAME, JSON.stringify(db));
-        }
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-        // --- LÓGICA DEL USUARIO (Entrar) ---
-        function tryLogin() {
-            const input = userKeyInput.value.trim().toUpperCase();
-            loginMsg.textContent = "";
+        // --- CONSTANTES ---
+        const ADMIN_PASSWORD = "AMOR_FRIO"; // <--- ¡TU CLAVE PARA ENTRAR AL ADMIN!
 
-            if (!input) {
-                loginMsg.textContent = "Necesitas una llave.";
-                return;
-            }
+        // --- REFERENCIAS DOM ---
+        const viewLogin = document.getElementById('view-login');
+        const viewContent = document.getElementById('view-content');
+        const loginMsg = document.getElementById('login-msg');
+        
+        const adminPanel = document.getElementById('admin-panel');
+        const adminAuthView = document.getElementById('admin-auth-view');
+        const adminToolsView = document.getElementById('admin-tools-view');
+        const keysDisplay = document.getElementById('keys-display');
 
-            // 1. Verificamos si la llave es válida (está en activeKeys)
-            const index = db.activeKeys.indexOf(input);
-
-            if (index !== -1) {
-                // ¡ÉXITO!
-                // 2. Invalidamos la llave (la movemos a usadas)
-                db.activeKeys.splice(index, 1);
-                db.usedKeys.push(input);
-                saveDB();
-
-                // 3. Mostramos animación y contenido
-                loginMsg.className = "success-msg";
-                loginMsg.textContent = "Llave aceptada...";
-                
-                setTimeout(() => {
-                    loginCard.classList.add('hidden');
-                    contentCard.classList.remove('hidden');
-                }, 1500);
-
-            } else if (db.usedKeys.includes(input)) {
-                // ERROR: Ya se usó
-                loginMsg.className = "error-msg";
-                loginMsg.textContent = "Esta llave ya fue usada y se rompió.";
-            } else {
-                // ERROR: No existe
-                loginMsg.className = "error-msg";
-                loginMsg.textContent = "Esa llave no encaja aquí.";
-            }
-        }
-
-        // --- LÓGICA DE ADMINISTRADOR (Generar) ---
-        function toggleAdmin() {
-            if (adminPanel.style.display === 'block') {
-                adminPanel.style.display = 'none';
-                // Resetear vista al cerrar
-                adminLoginView.classList.remove('hidden');
-                adminControlsView.classList.add('hidden');
-                adminPassInput.value = "";
-            } else {
-                adminPanel.style.display = 'block';
-            }
-        }
-
-        function checkAdminPass() {
-            if (adminPassInput.value === ADMIN_PASSWORD) {
-                adminLoginView.classList.add('hidden');
-                adminControlsView.classList.remove('hidden');
-                renderKeys();
-            } else {
-                alert("Acceso Denegado");
-            }
-        }
-
-        function generateKey() {
-            // Genera string aleatorio de 6 caracteres
-            const newKey = Math.random().toString(36).substring(2, 8).toUpperCase();
+        // --- 4.3 FUNCIONES DE USUARIO (ENTRAR) ---
+        window.enterSystem = async () => {
+            const keyInput = document.getElementById('user-key-input').value.trim().toUpperCase();
             
-            db.activeKeys.push(newKey);
-            saveDB();
-            renderKeys();
-        }
-
-        function renderKeys() {
-            keyDisplayList.innerHTML = "";
-            if (db.activeKeys.length === 0) {
-                keyDisplayList.innerHTML = "<li class='key-item'>No hay llaves activas.</li>";
+            if (!keyInput) {
+                loginMsg.textContent = "Escribe algo...";
                 return;
             }
-            // Mostrar últimas creadas primero
-            db.activeKeys.slice().reverse().forEach(key => {
-                const li = document.createElement('li');
-                li.className = 'key-item';
-                li.textContent = `>> ${key}`;
-                keyDisplayList.appendChild(li);
+
+            loginMsg.textContent = "Verificando en el frío...";
+
+            // Referencia a la llave específica en la BD
+            const keyRef = ref(db, 'llaves/' + keyInput);
+            
+            try {
+                const snapshot = await get(keyRef);
+                const data = snapshot.val();
+
+                if (data && data.estado === "activa") {
+                    // 1. LLAVE CORRECTA -> La marcamos como usada inmediatamente
+                    await update(keyRef, {
+                        estado: "usada",
+                        usadaEn: new Date().toISOString()
+                    });
+
+                    // 2. Mostrar contenido
+                    loginMsg.style.color = "var(--c-text-mint)";
+                    loginMsg.textContent = "Llave aceptada.";
+                    setTimeout(() => {
+                        viewLogin.classList.add('hidden');
+                        viewContent.classList.remove('hidden');
+                    }, 1000);
+
+                } else if (data && data.estado === "usada") {
+                    loginMsg.style.color = "var(--c-accent-love)";
+                    loginMsg.textContent = "Llave rota (ya usada).";
+                } else {
+                    loginMsg.style.color = "var(--c-accent-love)";
+                    loginMsg.textContent = "La llave no existe.";
+                }
+            } catch (error) {
+                console.error(error);
+                loginMsg.textContent = "Error de conexión.";
+            }
+        };
+
+        document.getElementById('btn-enter').addEventListener('click', window.enterSystem);
+
+        // --- 4.4 FUNCIONES DE ADMIN (GESTIÓN) ---
+        
+        // Abrir/Cerrar Panel
+        document.getElementById('btn-open-admin').addEventListener('click', () => {
+            adminPanel.style.display = 'block';
+        });
+        document.getElementById('btn-close-admin').addEventListener('click', () => {
+            adminPanel.style.display = 'none';
+        });
+
+        // Login Admin Local
+        document.getElementById('btn-admin-login').addEventListener('click', () => {
+            const pass = document.getElementById('admin-pass-input').value;
+            if (pass === ADMIN_PASSWORD) {
+                adminAuthView.classList.add('hidden');
+                adminToolsView.classList.remove('hidden');
+                startKeysListener(); // Empezar a ver llaves en tiempo real
+            } else {
+                alert("Acceso denegado");
+            }
+        });
+
+        // Generar Nueva Llave
+        document.getElementById('btn-generate').addEventListener('click', () => {
+            const newKey = Math.random().toString(36).substring(2, 6).toUpperCase();
+            
+            // Guardar en Firebase
+            set(ref(db, 'llaves/' + newKey), {
+                estado: "activa",
+                creada: new Date().toISOString()
+            });
+            alert(`Llave creada: ${newKey}`);
+        });
+
+        // Escuchar cambios en la base de datos (Ver lista)
+        function startKeysListener() {
+            const allKeysRef = ref(db, 'llaves');
+            onValue(allKeysRef, (snapshot) => {
+                const data = snapshot.val();
+                keysDisplay.innerHTML = "";
+                
+                if (!data) {
+                    keysDisplay.innerHTML = "No hay llaves.";
+                    return;
+                }
+
+                // Convertir objeto a array y mostrar
+                Object.keys(data).forEach(key => {
+                    const info = data[key];
+                    const color = info.estado === 'activa' ? '#9AE8B7' : '#C61B24'; // Verde o Rojo
+                    keysDisplay.innerHTML += `<div style="color:${color}; margin-bottom:5px;">
+                        [${info.estado === 'activa' ? 'ACT' : 'USD'}] <b>${key}</b>
+                    </div>`;
+                });
             });
         }
 
