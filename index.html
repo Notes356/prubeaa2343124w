@@ -1,379 +1,130 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Nota privada — Módulo</title>
-<style>
-  :root{
-    --bg:#070707;
-    --text:#e9e9e9;
-    --muted:#9b9b9b;
-    --alert:#ff6b6b;
-    --green:#6cff8a;
-  }
-  html,body{height:100%;margin:0;font-family:Consolas,Monaco,monospace;background:var(--bg);color:var(--text);overflow:hidden}
-  #inicio{height:100%;display:flex;align-items:center;justify-content:center;background:#f3f3f3}
-  .btn{padding:18px 36px;border-radius:10px;border:0;background:#111;color:#fff;font-size:18px;cursor:pointer}
-  #terminal{display:none;height:100%;padding:16px 18px;box-sizing:border-box;white-space:pre-wrap;overflow:auto;background:linear-gradient(180deg,#050505,#0c0c0c);font-size:14px;line-height:1.25}
-  .dim{color:var(--muted)}
-  .alert{color:var(--alert)}
-  .green{color:var(--green)}
-  #whiteFlash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:9998;transition:opacity 0.03s linear}
-  #modalNotify{position:fixed;right:16px;bottom:16px;background:#111;color:#fff;padding:12px 14px;border-radius:8px;box-shadow:0 6px 30px rgba(0,0,0,0.6);z-index:9999;display:none}
-  #stopBtn{position:fixed;left:16px;top:16px;background:#222;color:#fff;padding:8px 12px;border-radius:8px;border:0;z-index:9999;cursor:pointer}
-  .big{font-size:15px}
-  a.small{color:var(--muted);font-size:12px;text-decoration:none;margin-left:8px}
-  .fs-active #terminal{padding:36px}
-  /* shake screen visual (complementario a vibración física) */
-  @keyframes screenshake {
-    0% { transform: translate(0,0); }
-    10% { transform: translate(-2px,1px); }
-    20% { transform: translate(2px,-1px); }
-    30% { transform: translate(-3px,2px); }
-    40% { transform: translate(3px,-2px); }
-    50% { transform: translate(0,0); }
-    100% { transform: translate(0,0); }
-  }
-  .shake { animation: screenshake 0.18s infinite linear; }
-  /* tiny visual for red pulsing lines */
-  .pulse-red {
-    display:inline-block;
-    box-shadow: 0 0 12px rgba(255,90,90,0.12);
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti - Recuerdo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Courier Prime', monospace; }
+        .pixel-border {
+            box-shadow: 
+                0 4px 0 -2px #2F2650, 0 -4px 0 -2px #2F2650, 
+                4px 0 0 -2px #2F2650, -4px 0 0 -2px #2F2650,
+                0 0 0 2px #2F2650;
+        }
+        .pixel-shadow { box-shadow: 8px 8px 0px 0px rgba(52, 58, 114, 0.4); }
+        .pixel-btn-shadow { box-shadow: 4px 4px 0px 0px #2F2650; }
+        .pixel-btn-shadow:active { box-shadow: 0px 0px 0px 0px #2F2650; transform: translate(4px, 4px); }
+        .step-content { display: none; }
+        .step-content.active { display: block; }
+    </style>
 </head>
-<body>
+<body class="bg-[#2F2650] min-h-screen flex items-center justify-center p-4 overflow-x-hidden">
 
-<div id="inicio">
-  <button class="btn" id="openBtn">📄 Abrir nota privada</button>
-</div>
+    <!-- Fondo Decorativo -->
+    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#DF2956] rounded-full blur-[120px] opacity-20 pointer-events-none"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#C1D3AC] rounded-full blur-[120px] opacity-10 pointer-events-none"></div>
 
-<div id="terminal" role="log" aria-live="polite"></div>
+    <main class="w-full max-w-md z-10">
+        
+        <!-- PÁGINA 1: TEASER -->
+        <div id="step-1" class="step-content active animate-in fade-in duration-700">
+            <!-- Imagen Estilo Pixel -->
+            <div class="bg-[#2F2650] p-2 pixel-border mb-6">
+                <div class="bg-[#1B5676] aspect-video relative overflow-hidden flex items-center justify-center">
+                    <!-- Imagen de reemplazo que sí carga -->
+                    <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop" 
+                         class="w-full h-full object-cover opacity-50 mix-blend-overlay" alt="Bosque">
+                    <div class="absolute text-[#DF2956] text-4xl animate-pulse">❤</div>
+                </div>
+            </div>
 
-<div id="whiteFlash"></div>
-<div id="modalNotify" class="dim"></div>
-<button id="stopBtn" title="Detener efectos">✕ DETENER</button>
+            <!-- Carta -->
+            <div class="bg-[#C1D3AC] p-8 border-[6px] border-[#2F2650] pixel-shadow text-center">
+                <h1 class="text-xl font-bold text-[#2F2650] uppercase leading-none mb-2">PARA TI</h1>
+                <h2 class="text-[#C93478] font-bold text-sm mb-6">* UN ÚLTIMO RECUERDO *</h2>
+                
+                <div class="flex justify-center gap-2 mb-6">
+                    <div class="w-3 h-3 bg-[#DF2956]"></div>
+                    <div class="w-3 h-3 bg-[#343A72]"></div>
+                    <div class="w-3 h-3 bg-[#1B5676]"></div>
+                </div>
 
-<script>
-/* ----------------- ELEMENTOS ----------------- */
-const openBtn = document.getElementById('openBtn');
-const inicio = document.getElementById('inicio');
-const terminal = document.getElementById('terminal');
-const whiteFlash = document.getElementById('whiteFlash');
-const modalNotify = document.getElementById('modalNotify');
-const stopBtn = document.getElementById('stopBtn');
+                <p class="text-[11px] text-[#2F2650] font-bold mb-6">
+                    SI QUIERES, PUEDES VERLO AHORA.<br>SI NO, GUÁRDALO PARA DESPUÉS.
+                </p>
 
-stopBtn.style.display = 'none'; // oculto hasta iniciar
+                <div class="border-y-2 border-[#343A72] border-dotted py-4 mb-8">
+                    <p class="text-sm text-[#2F2650] italic">
+                        "Hay cosas que no se dicen a la ligera. Esto es una de ellas."
+                    </p>
+                </div>
 
-/* ----------------- ESTADO GLOBAL ----------------- */
-let vibInterval = null;
-let flashInterval = null;
-let audioCtx = null;
-let rumbleOsc = null;
-let rumbleGain = null;
-let alarmOsc = null;
-let alarmGain = null;
-let logsInterval = null;
-let keepRunning = true;
+                <button onclick="goToStep(2)" class="bg-[#DF2956] text-white px-6 py-3 border-4 border-[#2F2650] pixel-btn-shadow font-bold uppercase text-xs mb-6 w-full tracking-tighter">
+                    VER (SOLO PARA TI)
+                </button>
 
-/* evita salida fácil (navegadores controlan esto) */
-window.onbeforeunload = () => "Proceso en ejecución...";
+                <button onclick="toggleModal(true)" class="text-[#343A72] text-[10px] font-bold block mx-auto">
+                    [ ENTRAR CON CLAVE ]
+                </button>
 
-/* ----------------- GENERADOR DE LOGS (HTML, con colores) ----------------- */
-function generateLogStream(){
-  const imgs = Array.from({length:300},(_,i)=>`IMG_${3000+i}.jpg`);
-  const vids = Array.from({length:90},(_,i)=>`VID_${1100+i}.mp4`);
-  const auds = Array.from({length:160},(_,i)=>`AUDIO_${200+i}.ogg`);
-  const chatUsers = ['maria','juan','sofia','carlos','luis','ana','paula','dani','sara','alex','laura','ramon'];
-  const now = Date.now();
+                <p class="text-[10px] text-[#1B5676] mt-8 tracking-widest uppercase font-bold">Paso 01 / 06</p>
+            </div>
+        </div>
+<!-- PÁGINAS SIGUIENTES (MOLDE) -->
+        <div id="step-generic" class="step-content">
+            <div class="bg-[#C1D3AC] p-8 border-[6px] border-[#2F2650] pixel-shadow text-center">
+                <h2 id="step-title" class="text-lg font-bold text-[#2F2650] mb-4 uppercase">ETAPA 2</h2>
+                <div class="w-16 h-16 mx-auto mb-6 bg-[#343A72] border-4 border-[#2F2650] flex items-center justify-center pixel-btn-shadow">
+                    <span class="text-[#C93478] text-2xl">❤</span>
+                </div>
+                <p class="text-xs font-bold text-[#2F2650]">CARGANDO SIGUIENTE PIEZA...</p>
+                <button onclick="goToStep(1)" class="mt-8 text-[10px] text-[#DF2956] underline font-bold uppercase">
+                    [ REINICIAR ]
+                </button>
+            </div>
+        </div>
 
-  let step = 0;
-  return function pushMore(){
-    if(!keepRunning) return;
-    const lines = [];
-    const batch = 8 + Math.floor(Math.random() * 22); // más líneas por lote
-    for(let j=0;j<batch;j++){
-      step++;
-      const t = new Date(now + step * 1000).toISOString().replace('T',' ').slice(0,19);
-      const r = Math.random();
-      let text = '';
-      if(r < 0.06){
-        const user = chatUsers[Math.floor(Math.random()*chatUsers.length)];
-        const amount = Math.floor(Math.random()*9500)+1;
-        text = `[${t}] [DB] whatsapp/msgstore.db -> lectura completa (mensajes: ${amount})`;
-        text = `<span class="green">${escapeHtml(text)}</span>`;
-      } else if (r < 0.18){
-        const f = imgs[Math.floor(Math.random()*imgs.length)];
-        text = `[${t}] [FILE] /storage/DCIM/Camera/${f} -> COPIA OK (size: ${Math.floor(Math.random()*8200)+120}KB)`;
-      } else if (r < 0.26){
-        const f = vids[Math.floor(Math.random()*vids.length)];
-        text = `[${t}] [FILE] /storage/DCIM/Camera/${f} -> COPIA OK (size: ${Math.floor(Math.random()*72000)+5000}KB)`;
-      } else if (r < 0.38){
-        const f = auds[Math.floor(Math.random()*auds.length)];
-        text = `[${t}] [FILE] /storage/WhatsApp/Media/Audio/${f} -> COPIA OK`;
-      } else if (r < 0.50){
-        const u = chatUsers[Math.floor(Math.random()*chatUsers.length)];
-        text = `[${t}] [API] Instagram -> descargar_dms('${u}') -> ${Math.floor(Math.random()*420)} mensajes, adjuntos: ${Math.floor(Math.random()*48)}`;
-        text = `<span class="dim">${escapeHtml(text)}</span>`;
-      } else if (r < 0.60){
-        text = `[${t}] [SYS] Exportando contactos -> contacts_export.vcf (registros: ${Math.floor(Math.random()*1200)+30})`;
-      } else if (r < 0.72){
-        text = `[${t}] [ZIP] pack_media_part_${Math.floor(Math.random()*28)+1}.zip -> ${Math.floor(Math.random()*98)+2}%`;
-      } else if (r < 0.82){
-        text = `[${t}] [KEY] tokens/session_${Math.random().toString(36).slice(2,10)} -> token extraido`;
-      } else if (r < 0.90){
-        text = `<span class="green">[${t}] [NET] upload -> ${Math.floor(Math.random()*98)+1}% velocidad:${Math.floor(Math.random()*42)+1}MB/s</span>`;
-      } else {
-        text = `<span class="alert pulse-red">[${t}] [CRIT] bypass_firewall -> OK  root_simulated=true</span>`;
-      }
-      // añade línea al bloque
-      lines.push(text);
-    }
-    // empuja a la terminal (HTML)
-    terminal.innerHTML += lines.join('<br>') + '<br>';
-    terminal.scrollTop = terminal.scrollHeight;
-  };
-}
+    </main>
 
-/* escape simple para seguridad interna (aunque todo es ficticio) */
-function escapeHtml(s){
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+    <!-- Modal de Contraseña -->
+    <div id="password-modal" class="fixed inset-0 bg-[#2F2650]/90 backdrop-blur-sm z-50 hidden items-center justify-center p-6">
+        <div class="bg-[#C1D3AC] border-4 border-[#2F2650] p-6 max-w-xs w-full text-center space-y-4 pixel-shadow">
+            <h3 class="text-xs font-bold text-[#2F2650]">SISTEMA BLOQUEADO_</h3>
+            <input type="password" id="pass-input" class="w-full bg-white border-2 border-[#2F2650] outline-none text-center py-2 text-[#2F2650]" placeholder="****">
+            <div class="flex justify-center gap-4 pt-2">
+                <button onclick="toggleModal(false)" class="text-[10px] text-[#DF2956] font-bold">CERRAR</button>
+                <button onclick="checkPass()" class="text-[10px] text-[#2F2650] font-bold">CONFIRMAR</button>
+            </div>
+        </div>
+    </div>
 
-/* ----------------- VIBRACIÓN "TEMBLOR" ----------------- */
-function startVibrationAndShake(){
-  // patrón de vibración intenso tipo temblor: ráfagas cortas y rápidas
-  if ('vibrate' in navigator ){
-    if(vibInterval) clearInterval(vibInterval);
-    // cada intervalo disparamos una ráfaga (navegadores pueden ignorar si pestaña en fondo)
-    vibInterval = setInterval(()=>{
-      // ráfaga impredecible para sensación de temblor
-      const pattern = [
-        180,30,140,40,120,30,100,20,80,20,60
-      ];
-      navigator.vibrate(pattern);
-      // además aplicamos una tímida sacudida visual sincronizada
-      document.body.classList.add('shake');
-      setTimeout(()=>document.body.classList.remove('shake'), 220);
-      // pulsar el rumble audio (si existe)
-      pulseRumble();
-    }, 420); // cada ~0.42s una ráfaga
-  } else {
-    // si no hay vibración, solo hacemos la sacudida visual y audio
-    vibInterval = setInterval(()=>{
-      document.body.classList.add('shake');
-      setTimeout(()=>document.body.classList.remove('shake'), 220);
-      pulseRumble();
-    }, 420);
-  }
-}
-function stopVibrationAndShake(){
-  if('vibrate' in navigator) navigator.vibrate(0);
-  if(vibInterval) clearInterval(vibInterval);
-  vibInterval = null;
-  document.body.classList.remove('shake');
-}
+    <script>
+        function goToStep(stepNumber) {
+            // Ocultar todos
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+            
+            if(stepNumber === 1) {
+                document.getElementById('step-1').classList.add('active');
+            } else {
+                const generic = document.getElementById('step-generic');
+                document.getElementById('step-title').innerText = 'ETAPA ' + stepNumber;
+                generic.classList.add('active');
+            }
+            window.scrollTo(0,0);
+        }
 
-/* ----------------- AUDIO: RUMBLE + ALARMA ----------------- */
-function startAudioEngine(){
-  try{
-    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        function toggleModal(show) {
+            document.getElementById('password-modal').style.display = show ? 'flex' : 'none';
+        }
 
-    // RUMBLE (baja frecuencia, sutil)
-    rumbleOsc = audioCtx.createOscillator();
-    rumbleGain = audioCtx.createGain();
-    rumbleOsc.type = 'sine';
-    rumbleOsc.frequency.value = 65; // 60-80Hz para ruidos de "motor/vibración"
-    rumbleGain.gain.value = 0.0;
-    rumbleOsc.connect(rumbleGain);
-    rumbleGain.connect(audioCtx.destination);
-    rumbleOsc.start();
-
-    // ALARMA (tono más agudo modulable, bajo volumen)
-    alarmOsc = audioCtx.createOscillator();
-    alarmGain = audioCtx.createGain();
-    alarmOsc.type = 'sawtooth';
-    alarmOsc.frequency.value = 620; // tono agudo para sensación de alerta
-    alarmGain.gain.value = 0.0;
-    alarmOsc.connect(alarmGain);
-    alarmGain.connect(audioCtx.destination);
-    alarmOsc.start();
-
-    // leve fade-in para no explotar los altavoces
-    let v=0.0;
-    const id = setInterval(()=>{
-      v = Math.min(0.06, v + 0.0035);
-      // alarma y rumble distintos volúmenes
-      rumbleGain.gain.value = v * 0.55;
-      alarmGain.gain.value = v * 0.65;
-      if(v >= 0.06) clearInterval(id);
-    }, 90);
-  }catch(e){
-    console.warn('Audio no disponible.', e);
-  }
-}
-function stopAudioEngine(){
-  try{
-    if(rumbleOsc){ rumbleOsc.stop(); rumbleOsc.disconnect(); rumbleOsc = null; }
-    if(alarmOsc){ alarmOsc.stop(); alarmOsc.disconnect(); alarmOsc = null; }
-    if(audioCtx){ audioCtx.close(); audioCtx = null; }
-  }catch(e){}
-}
-/* Pulso corto para sincronizar con vibración */
-function pulseRumble(){
-  if(!rumbleGain) return;
-  // aumento rápido y caída para sensación de golpe
-  const now = audioCtx.currentTime;
-  rumbleGain.gain.cancelScheduledValues(now);
-  rumbleGain.gain.setValueAtTime(rumbleGain.gain.value, now);
-  rumbleGain.gain.linearRampToValueAtTime(0.14, now + 0.02);
-  rumbleGain.gain.linearRampToValueAtTime(0.0, now + 0.18);
-  // también pulso alarma aguda muy breve
-  if(alarmGain){
-    alarmGain.gain.cancelScheduledValues(now);
-    alarmGain.gain.setValueAtTime(alarmGain.gain.value, now);
-    alarmGain.gain.linearRampToValueAtTime(0.06, now + 0.02);
-    alarmGain.gain.linearRampToValueAtTime(0.0, now + 0.12);
-  }
-}
-
-/* ----------------- FLASH BLANCO ----------------- */
-function startWhiteFlashes(){
-  if(flashInterval) clearInterval(flashInterval);
-  flashInterval = setInterval(()=>{
-    whiteFlash.style.opacity = '0.98';
-    setTimeout(()=>whiteFlash.style.opacity='0', 60 + Math.random()*120);
-  }, 380 + Math.random()*300);
-}
-function stopWhiteFlashes(){
-  if(flashInterval) clearInterval(flashInterval);
-  whiteFlash.style.opacity = '0';
-}
-
-/* ----------------- NOTIFICACIONES IN-APP O NATIVE ----------------- */
-function showInPageNotice(msg){
-  modalNotify.innerText = msg;
-  modalNotify.style.display = 'block';
-  modalNotify.style.opacity = '1';
-  setTimeout(()=>{ modalNotify.style.opacity = '0'; setTimeout(()=>modalNotify.style.display='none',400); }, 2600 + Math.random()*2200);
-}
-function requestAndSendNotification(title, body){
-  if(!("Notification" in window)) { showInPageNotice(body); return; }
-  if(Notification.permission === 'granted'){
-    new Notification(title, {body, tag:'intensa-notif'});
-  } else if(Notification.permission !== 'denied'){
-    Notification.requestPermission().then(p=>{
-      if(p === 'granted'){ new Notification(title, {body, tag:'intensa-notif'}); }
-      else showInPageNotice(body);
-    });
-  } else {
-    showInPageNotice(body);
-  }
-}
-
-/* ----------------- MODO PERSISTENTE (EFECTOS + LOGS) ----------------- */
-function startPersistentMode(){
-  if(document.documentElement.requestFullscreen){
-    document.documentElement.requestFullscreen().catch(()=>{});
-  }
-  document.body.classList.add('fs-active');
-  stopBtn.style.display = 'inline-block';
-
-  // efectos
-  startAudioEngine();
-  startVibrationAndShake();
-  startWhiteFlashes();
-
-  // notificaciones periódicas que advierten "No apagar dispositivo"
-  const notifLoop = setInterval(()=>{
-    if(!keepRunning){ clearInterval(notifLoop); return; }
-    requestAndSendNotification('ATENCIÓN', 'Proceso crítico en curso. No apagar el dispositivo.');
-    showInPageNotice('PROCESO CRÍTICO — NO APAGUE EL DISPOSITIVO');
-  }, 5000 + Math.random()*8000);
-
-  // logs persistentes
-  const push = generateLogStream();
-  push(); // burst inicial
-  logsInterval = setInterval(()=>{
-    if(!keepRunning) return;
-    // empuja múltiples veces de forma variable
-    push();
-    if(Math.random()>0.6) push();
-    if(Math.random()>0.92) {
-      // inyecta línea roja muy crítica
-      const t = new Date().toISOString().replace('T',' ').slice(0,19);
-      terminal.innerHTML += `<span class="alert pulse-red">[${t}] [CRIT] TRANSFERENCIA FINAL - paquete_critical.bin -> 100%</span><br>`;
-      terminal.scrollTop = terminal.scrollHeight;
-    }
-  }, 800);
-}
-
-/* ----------------- DETENER TODO (escape seguro) ----------------- */
-function stopAll(){
-  keepRunning = false;
-  // stop intervals and effects
-  stopVibrationAndShake();
-  stopWhiteFlashes();
-  stopAudioEngine();
-  if(logsInterval) clearInterval(logsInterval);
-  window.onbeforeunload = null;
-  document.body.classList.remove('fs-active');
-  try{ if(document.exitFullscreen) document.exitFullscreen().catch(()=>{}); }catch(e){}
-  stopBtn.style.display = 'none';
-  modalNotify.style.display = 'none';
-  // deja la terminal con estado final (sin revelar "broma")
-  terminal.innerHTML += '<br><span class="dim">[SYSTEM] procesos detenidos por el usuario</span><br>';
-  terminal.scrollTop = terminal.scrollHeight;
-}
-
-/* ----------------- EVENTOS UI ----------------- */
-openBtn.addEventListener('click', ()=>{
-  inicio.style.display = 'none';
-  terminal.style.display = 'block';
-  // petición de notificaciones (silenciosa)
-  if("Notification" in window && Notification.permission === 'default'){
-    Notification.requestPermission().then(()=>{});
-  }
-  // Intro controlado (más textual en blanco pero con toques color)
-  const introLines = [
-    '[BOOT] Arrancando módulo remoto...',
-    '[SYS] Comprobando integridad del kernel...',
-    '[NET] Inicializando stack de red...',
-    '[NET] Buscando redes y dispositivos en LAN...',
-    `[NET] IP detectada -> 192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`,
-    '[AUTH] Elevando privilegios (simulado)...',
-    '[OK] Acceso temporal concedido',
-    '[SCAN] Escaneando aplicaciones instaladas: whatsapp, instagram, gallery, storage, contacts',
-    '[PROC] Montando drivers virtuales...',
-    '[DB] Abriendo whatsapp/msgstore.db ...',
-    '[DB] Leyendo índices de mensajes...',
-    '[DB] Indexes OK, iterando tablas...',
-    '[SYNC] Comenzando extracción masiva de multimedia y chats...'
-  ];
-  let k = 0;
-  function writeIntro(){
-    if(k<introLines.length){
-      terminal.innerHTML += escapeHtml(introLines[k]) + '<br>';
-      terminal.scrollTop = terminal.scrollHeight;
-      k++;
-      setTimeout(writeIntro, 240);
-    } else {
-      // iniciar modo persistente
-      startPersistentMode();
-    }
-  }
-  writeIntro();
-});
-
-stopBtn.addEventListener('click', ()=>{
-  const ok = confirm('Detener todos los efectos y salir?');
-  if(ok) stopAll();
-});
-
-/* detener al ocultarse la página (por seguridad) */
-window.addEventListener('pagehide', ()=>{ stopAll(); });
-
-</script>
+        function checkPass() {
+            // Aquí podrías validar, por ahora solo avanza
+            toggleModal(false);
+            goToStep(2);
+        }
+    </script>
 </body>
 </html>
