@@ -1,169 +1,255 @@
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Declaración Final</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fragmentos de un Sueño - Experiencia Completa</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     
     <style>
+        /* =========================================
+           1. ESTILOS GLOBALES Y VARIABLES
+           ========================================= */
         :root {
-            /* Paleta extraída de tus imágenes */
-            --c-bg-deep: #153548;    /* Fondo Profundo (Frío) */
-            --c-bg-panel: #1A545D;   /* Paneles (Teal Oscuro) */
-            --c-accent-love: #C61B24; /* Rojo/Rosa Apagado (Amor triste) */
-            --c-text-mint: #9AE8B7;  /* Verde Menta (Luz fría) */
-            --c-text-dim: #605056;   /* Púrpura grisáceo (Detalles) */
-            --c-shadow: #0a131a;     /* Sombra negra azulada */
+            --c-sky-top: #3a7bd5;
+            --c-sky-bottom: #fbb6ce;
+            --c-panel-bg: #2a2a4a;
+            --c-panel-border: #4a4a7a;
+            --c-accent: #ff6b81;
+            --c-text-light: #e0e0ff;
+            --c-text-highlight: #ffd700;
+            --c-shadow: rgba(0, 0, 0, 0.3);
+            
+            /* Fase 2 específicos */
+            --c-bubble-bg: rgba(23, 23, 40, 0.95);
+            --c-border-light: #ffffff;
+            --c-border-shadow: #000000;
         }
 
-        body {
-            background-color: var(--c-bg-deep);
-            font-family: 'VT323', monospace;
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100vh;
             overflow: hidden;
-            color: var(--c-text-mint);
+            font-family: 'VT323', monospace;
+            color: var(--c-text-light);
             user-select: none;
+            background: #050505;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Efecto CRT (Pantalla antigua) */
-        .scanlines {
+        /* --- ESTILOS FASE 1 (PORTAL) --- */
+        #portal-ui {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 4px, 6px 100%;
-            pointer-events: none; z-index: 99;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 100; transition: opacity 1.5s ease;
         }
 
-        /* Contenedores Pixel Art */
+        #portal-background {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, var(--c-sky-top), var(--c-sky-bottom));
+            z-index: -2;
+        }
+
+        .clouds {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.8) 10px, transparent 11px),
+                radial-gradient(circle at 25% 85%, rgba(255,255,255,0.8) 15px, transparent 16px),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.6) 20px, transparent 21px),
+                radial-gradient(circle at 85% 25%, rgba(255,255,255,0.6) 15px, transparent 16px);
+            background-size: 300px 300px;
+            animation: floatClouds 60s linear infinite;
+        }
+        @keyframes floatClouds { from { background-position: 0 0; } to { background-position: 300px 100px; } }
+
+        .mountains {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 40%; pointer-events: none; z-index: -1;
+            background-image: linear-gradient(to bottom, #2a2a4a 0%, #1a1a2a 100%);
+            clip-path: polygon(0% 100%, 0% 20%, 20% 40%, 40% 0%, 60% 30%, 80% 10%, 100% 50%, 100% 100%);
+        }
+
         .pixel-card {
-            background: var(--c-bg-panel);
-            border: 4px solid var(--c-shadow);
-            padding: 2rem;
-            width: 90%; max-width: 350px;
-            text-align: center;
-            position: relative;
-            box-shadow: 
-                inset 0 0 0 4px var(--c-bg-deep),
-                8px 8px 0px var(--c-shadow);
+            background: var(--c-panel-bg);
+            border: 4px solid var(--c-panel-border);
+            padding: 2.5rem; width: 90%; max-width: 380px;
+            text-align: center; position: relative;
+            box-shadow: 0 8px 16px var(--c-shadow);
+            border-radius: 8px;
+        }
+        .pixel-card::after {
+            content: ''; position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px;
+            border: 2px dashed var(--c-panel-border); pointer-events: none;
         }
 
         .icon-heart {
-            font-size: 40px; color: var(--c-accent-love);
-            text-shadow: 2px 2px var(--c-shadow);
-            margin-bottom: 10px;
-            display: inline-block;
+            font-size: 50px; color: var(--c-accent);
+            text-shadow: 0 4px 8px var(--c-shadow);
+            margin-bottom: 15px; display: inline-block;
             animation: beat 3s infinite ease-in-out;
         }
+        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
 
-        @keyframes beat { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } }
-
-        h1 { font-family: 'Press Start 2P', cursive; font-size: 16px; line-height: 1.5; margin-bottom: 1.5rem; color: #fff; text-shadow: 2px 2px var(--c-shadow); }
-        p { font-size: 1.2rem; color: var(--c-text-mint); margin-bottom: 2rem; }
-
-        /* Inputs y Botones */
         .pixel-input {
-            background: var(--c-shadow);
-            border: 2px solid var(--c-text-dim);
-            color: var(--c-accent-love);
-            font-family: 'Press Start 2P', cursive;
-            font-size: 12px;
-            padding: 15px;
-            width: 75%;
-            text-align: center;
-            outline: none;
-            margin-bottom: 20px;
-            text-transform: uppercase;
+            background: #1a1a2a; border: 3px solid var(--c-panel-border);
+            color: var(--c-accent); font-family: 'Press Start 2P', cursive;
+            font-size: 14px; padding: 15px; width: 80%; text-align: center;
+            outline: none; margin-bottom: 25px; text-transform: uppercase;
+            border-radius: 4px;
         }
-        .pixel-input:focus { border-color: var(--c-accent-love); }
 
         .pixel-btn {
-            background: var(--c-accent-love);
-            color: #fff;
-            border: none;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 10px;
-            padding: 15px 25px;
-            cursor: pointer;
-            box-shadow: 
-                inset 2px 2px 0px rgba(255,255,255,0.3),
-                inset -2px -2px 0px rgba(0,0,0,0.3),
-                4px 4px 0px var(--c-shadow);
-            transition: transform 0.1s;
+            background: var(--c-accent); color: #fff; border: none;
+            font-family: 'Press Start 2P', cursive; font-size: 12px;
+            padding: 15px 30px; cursor: pointer;
+            box-shadow: 0 6px #c74b5e; border-radius: 4px; transition: all 0.1s;
         }
-        .pixel-btn:active { transform: translate(4px, 4px); box-shadow: none; }
-        
-        .btn-small { padding: 8px 10px; font-size: 8px; margin-top: 10px; background: var(--c-text-dim); }
+        .pixel-btn:active { transform: translateY(4px); box-shadow: 0 2px #c74b5e; }
 
-        /* Utilidades */
-        .hidden { display: none !important; }
-        .error-msg { color: var(--c-accent-love); margin-top: 15px; font-size: 14px; min-height: 20px; }
-        
-        /* Panel Admin */
-        #admin-panel {
-            display: none; position: absolute; z-index: 50;
-            background: #000; border: 2px solid var(--c-accent-love);
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
-            padding: 20px; width: 300px;
+        /* --- ESTILOS FASE 2 (EXPERIENCIA) --- */
+        #experience-ui {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 50; display: none; /* Se activa tras login */
         }
-        .admin-trigger { position: fixed; bottom: 10px; right: 10px; opacity: 0.3; cursor: pointer; font-size: 20px; }
-        .key-list { text-align: left; font-size: 14px; max-height: 100px; overflow-y: auto; margin: 15px 0; border: 1px dashed var(--c-text-dim); padding: 5px; }
+
+        #background-layer-f2 {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://raw.githubusercontent.com/Notes356/NotasParsMIRO/93b1e8648e0e549080f108abcaf7eea0a2e9a657/image-2.webp');
+            background-size: cover; background-position: center;
+            z-index: -1; filter: brightness(0.65) contrast(1.1);
+        }
+
+        .vignette {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.8) 100%);
+            z-index: 1; pointer-events: none;
+        }
+
+        #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+        .particle { position: absolute; background: white; width: 2px; height: 2px; opacity: 0; animation: floatParticle 10s infinite linear; }
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }
+        }
+
+        #message-area {
+            position: absolute; top: 0; left: 0; width: 100%; height: 80%;
+            z-index: 10; display: flex; flex-direction: column;
+            justify-content: flex-end; align-items: center;
+            padding-bottom: 40px; pointer-events: none;
+        }
+
+        .pixel-bubble {
+            background: var(--c-bubble-bg); color: #e0e0e0;
+            padding: 18px 24px; margin: 12px 0; font-size: 1.5rem;
+            text-align: center; max-width: 85%; pointer-events: auto;
+            cursor: pointer; opacity: 0;
+            box-shadow: 0 0 0 2px #000, 0 0 0 4px #fff, 6px 6px 8px rgba(0,0,0,0.6);
+            transform: translateY(30px) scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+        }
+        .pixel-bubble.visible { opacity: 1; transform: translateY(0) scale(1); }
+
+        .progress-wrapper {
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            width: 220px; z-index: 20; opacity: 0; transition: opacity 1s;
+        }
+
+        .rpg-bar-container {
+            width: 100%; height: 18px; background: #1a1a1a;
+            border: 2px solid #fff; outline: 2px solid #000; padding: 2px;
+        }
+
+        .rainbow-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            background-size: 200% 200%; animation: rainbowFlow 3s linear infinite;
+        }
+        @keyframes rainbowFlow { 0% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        #next-stage-container {
+            position: fixed; bottom: 80px; left: 0; right: 0;
+            display: flex; justify-content: center; z-index: 30;
+            pointer-events: none; opacity: 0; transition: opacity 1s;
+        }
+
+        /* --- ADMIN Y UTILIDADES --- */
+        .hidden { display: none !important; }
+        .error-msg { color: var(--c-accent); margin-top: 20px; font-weight: bold; min-height: 24px; }
+        .admin-trigger { position: fixed; bottom: 15px; right: 15px; opacity: 0.5; cursor: pointer; font-size: 24px; z-index: 200; }
+        #admin-panel {
+            display: none; position: absolute; z-index: 300;
+            background: var(--c-panel-bg); border: 4px solid var(--c-accent);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            padding: 30px; width: 320px; border-radius: 8px;
+        }
+        .key-list { text-align: left; font-size: 16px; max-height: 150px; overflow-y: auto; margin: 20px 0; border: 2px dashed var(--c-panel-border); padding: 10px; background: #1a1a2a; }
     </style>
 </head>
 <body>
 
-    <div class="scanlines"></div>
-
-    <main class="pixel-card" id="view-login">
-        <div class="icon-heart">❤</div>
-        <h1>FRAGMENTOS<br>DE INVIERNO</h1>
-        <p>Una llave, un uso.<br>Introduce el código.</p>
-        
-        <input type="text" id="user-key-input" class="pixel-input" placeholder="XXXX" maxlength="10">
-        <button class="pixel-btn" id="btn-enter">ENTRAR</button>
-        
-        <div id="login-msg" class="error-msg"></div>
-    </main>
-
-    <main class="pixel-card hidden" id="view-content">
-        <div class="icon-heart" style="color: var(--c-text-mint);">❄</div>
-        <h1>ACCESO CONCEDIDO</h1>
-        <p>"La llave se ha roto tras su uso.<br>Bienvenido al recuerdo."</p>
-        
-        <div style="border: 2px dashed var(--c-accent-love); padding: 15px;">
-            <p style="color: #fff; font-size: 14px;">(Aquí irá la siguiente fase de tu página)</p>
+    <div id="portal-ui">
+        <div id="portal-background">
+            <div class="clouds"></div>
+            <div class="mountains"></div>
         </div>
-    </main>
+
+        <main class="pixel-card" id="view-login">
+            <div class="icon-heart">❤</div>
+            <h1>FRAGMENTOS<br>DE UN SUEÑO</h1>
+            <p>Una llave, una historia.<br>Introduce tu código.</p>
+            <input type="text" id="user-key-input" class="pixel-input" placeholder="XXXX" maxlength="10">
+            <br>
+            <button class="pixel-btn" id="btn-enter">ABRIR PORTAL</button>
+            <div id="login-msg" class="error-msg"></div>
+        </main>
+    </div>
 
     <div class="admin-trigger" id="btn-open-admin">⚙</div>
-
     <div id="admin-panel">
-        <h2 style="font-family:'Press Start 2P'; font-size:12px; color:var(--c-accent-love); margin-bottom:20px;">PANEL MAESTRO</h2>
-        
-        <div id="admin-auth-view">
-            <input type="password" id="admin-pass-input" class="pixel-input" placeholder="CLAVE MAESTRA">
+        <h2 style="font-family:'Press Start 2P'; font-size:14px; color:var(--c-accent); text-align:center;">PANEL DEL CREADOR</h2>
+        <div id="admin-auth-view" style="text-align: center;">
+            <input type="password" id="admin-pass-input" class="pixel-input" placeholder="CLAVE">
             <button class="pixel-btn" id="btn-admin-login">ACCEDER</button>
         </div>
-
-        <div id="admin-tools-view" class="hidden">
-            <button class="pixel-btn" id="btn-generate">GENERAR LLAVE</button>
-            <div id="keys-display" class="key-list">Cargando llaves...</div>
-            <button class="pixel-btn btn-small" id="btn-close-admin">CERRAR</button>
+        <div id="admin-tools-view" class="hidden" style="text-align: center;">
+            <button class="pixel-btn" id="btn-generate" style="width: 100%;">GENERAR LLAVE</button>
+            <div id="keys-display" class="key-list">Conectando...</div>
+            <button class="pixel-btn" id="btn-close-admin" style="font-size:10px; margin-top:10px;">CERRAR</button>
         </div>
     </div>
 
+    <div id="experience-ui">
+        <div id="background-layer-f2"></div>
+        <div class="vignette"></div>
+        <div id="particles"></div>
+        <div id="message-area"></div>
+        
+        <div class="progress-wrapper" id="ui-progress">
+            <div class="rpg-bar-container">
+                <div id="progress-fill" class="rainbow-fill"></div>
+            </div>
+        </div>
+
+        <div id="next-stage-container">
+            <button class="pixel-btn" style="background:var(--c-accent); box-shadow:0 0 15px var(--c-accent);" onclick="GameController.goToNextPhase()">SIGUIENTE FASE ➔</button>
+        </div>
+    </div>
+
+    <audio id="bg-music" loop preload="auto">
+        <source src="https://raw.githubusercontent.com/Notes356/NotasParsMIRO/83cc5716717c3fcbd5b70a0fce22e619326aff70/pixelated-game-vibe-music-450640.mp3" type="audio/mpeg">
+    </audio>
+
     <script type="module">
-        // 4.1 IMPORTAR FUNCIONES NECESARIAS
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
         import { getDatabase, ref, set, update, get, onValue } 
             from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
 
-        // 4.2 TU CONFIGURACIÓN (INTEGRADA)
+        // CONFIGURACIÓN FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyAnYkdRY_LhrJwpClgfWs38iP2mfxyc2tk",
             authDomain: "declaracion-final.firebaseapp.com",
@@ -173,128 +259,171 @@
             appId: "1:288671326547:web:e549d8d79e951e408e41a6"
         };
 
-        // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+        const ADMIN_PASSWORD = "AMOR_FRIO";
 
-        // --- CONSTANTES ---
-        const ADMIN_PASSWORD = "AMOR_FRIO"; // <--- ¡TU CLAVE PARA ENTRAR AL ADMIN!
-
-        // --- REFERENCIAS DOM ---
+        // Lógica Login Fase 1
         const viewLogin = document.getElementById('view-login');
-        const viewContent = document.getElementById('view-content');
         const loginMsg = document.getElementById('login-msg');
-        
-        const adminPanel = document.getElementById('admin-panel');
-        const adminAuthView = document.getElementById('admin-auth-view');
-        const adminToolsView = document.getElementById('admin-tools-view');
-        const keysDisplay = document.getElementById('keys-display');
 
-        // --- 4.3 FUNCIONES DE USUARIO (ENTRAR) ---
         window.enterSystem = async () => {
             const keyInput = document.getElementById('user-key-input').value.trim().toUpperCase();
+            if (!keyInput) { loginMsg.textContent = "Introduce una llave."; return; }
             
-            if (!keyInput) {
-                loginMsg.textContent = "Escribe algo...";
-                return;
-            }
-
-            loginMsg.textContent = "Verificando en el frío...";
-
-            // Referencia a la llave específica en la BD
+            loginMsg.textContent = "Consultando a las estrellas...";
             const keyRef = ref(db, 'llaves/' + keyInput);
             
             try {
                 const snapshot = await get(keyRef);
                 const data = snapshot.val();
-
                 if (data && data.estado === "activa") {
-                    // 1. LLAVE CORRECTA -> La marcamos como usada inmediatamente
-                    await update(keyRef, {
-                        estado: "usada",
-                        usadaEn: new Date().toISOString()
-                    });
-
-                    // 2. Mostrar contenido
-                    loginMsg.style.color = "var(--c-text-mint)";
-                    loginMsg.textContent = "Llave aceptada.";
+                    await update(keyRef, { estado: "usada", usadaEn: new Date().toISOString() });
+                    loginMsg.style.color = "var(--c-text-highlight)";
+                    loginMsg.textContent = "¡Llave correcta! Abriendo...";
+                    
+                    // TRANSICIÓN HACIA FASE 2
                     setTimeout(() => {
-                        viewLogin.classList.add('hidden');
-                        viewContent.classList.remove('hidden');
+                        document.getElementById('portal-ui').style.opacity = '0';
+                        setTimeout(() => {
+                            document.getElementById('portal-ui').classList.add('hidden');
+                            GameController.startExperience();
+                        }, 1500);
                     }, 1000);
 
-                } else if (data && data.estado === "usada") {
-                    loginMsg.style.color = "var(--c-accent-love)";
-                    loginMsg.textContent = "Llave rota (ya usada).";
                 } else {
-                    loginMsg.style.color = "var(--c-accent-love)";
-                    loginMsg.textContent = "La llave no existe.";
+                    loginMsg.textContent = (data && data.estado === "usada") ? "Esta llave ya se rompió." : "La llave no existe.";
                 }
-            } catch (error) {
-                console.error(error);
-                loginMsg.textContent = "Error de conexión.";
+            } catch (e) { loginMsg.textContent = "Error de conexión."; }
+        };
+        document.getElementById('btn-enter').onclick = window.enterSystem;
+
+        // Lógica Admin
+        document.getElementById('btn-open-admin').onclick = () => document.getElementById('admin-panel').style.display = 'block';
+        document.getElementById('btn-close-admin').onclick = () => document.getElementById('admin-panel').style.display = 'none';
+        document.getElementById('btn-admin-login').onclick = () => {
+            if(document.getElementById('admin-pass-input').value === ADMIN_PASSWORD) {
+                document.getElementById('admin-auth-view').classList.add('hidden');
+                document.getElementById('admin-tools-view').classList.remove('hidden');
+                onValue(ref(db, 'llaves'), (snap) => {
+                    const display = document.getElementById('keys-display');
+                    display.innerHTML = "";
+                    const data = snap.val();
+                    if(data) Object.keys(data).forEach(k => {
+                        display.innerHTML += `<div style="color:${data[k].estado==='activa'?'#ffd700':'#ff6b81'}">${k} [${data[k].estado}]</div>`;
+                    });
+                });
+            }
+        };
+        document.getElementById('btn-generate').onclick = () => {
+            const key = Math.random().toString(36).substring(2, 6).toUpperCase();
+            set(ref(db, 'llaves/' + key), { estado: "activa", creada: new Date().toISOString() });
+        };
+    </script>
+
+    <script>
+        // LÓGICA FASE 2 (Encapsulada)
+        const STORY_TEXTS = [
+            "A veces las palabras sobran...",
+            "Pero los sentimientos queman.",
+            "He guardado este momento para ti.",
+            "Escucha el ritmo con calma.",
+            "Estamos a mitad del camino.",
+            "¿Me acompañas un poco más?"
+        ];
+
+        const AudioSys = {
+            ctx: null, musicEl: document.getElementById('bg-music'),
+            init() { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+            playMusic() {
+                if (this.ctx.state === 'suspended') this.ctx.resume();
+                this.musicEl.volume = 0;
+                this.musicEl.play().then(() => {
+                    let vol = 0;
+                    const fade = setInterval(() => {
+                        if (vol < 0.6) { vol += 0.05; this.musicEl.volume = vol; }
+                        else clearInterval(fade);
+                    }, 200);
+                });
+            },
+            playBloop() {
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+                gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.1);
+                osc.connect(gain); gain.connect(this.ctx.destination);
+                osc.start(); osc.stop(this.ctx.currentTime + 0.1);
             }
         };
 
-        document.getElementById('btn-enter').addEventListener('click', window.enterSystem);
-
-        // --- 4.4 FUNCIONES DE ADMIN (GESTIÓN) ---
-        
-        // Abrir/Cerrar Panel
-        document.getElementById('btn-open-admin').addEventListener('click', () => {
-            adminPanel.style.display = 'block';
-        });
-        document.getElementById('btn-close-admin').addEventListener('click', () => {
-            adminPanel.style.display = 'none';
-        });
-
-        // Login Admin Local
-        document.getElementById('btn-admin-login').addEventListener('click', () => {
-            const pass = document.getElementById('admin-pass-input').value;
-            if (pass === ADMIN_PASSWORD) {
-                adminAuthView.classList.add('hidden');
-                adminToolsView.classList.remove('hidden');
-                startKeysListener(); // Empezar a ver llaves en tiempo real
-            } else {
-                alert("Acceso denegado");
-            }
-        });
-
-        // Generar Nueva Llave
-        document.getElementById('btn-generate').addEventListener('click', () => {
-            const newKey = Math.random().toString(36).substring(2, 6).toUpperCase();
-            
-            // Guardar en Firebase
-            set(ref(db, 'llaves/' + newKey), {
-                estado: "activa",
-                creada: new Date().toISOString()
-            });
-            alert(`Llave creada: ${newKey}`);
-        });
-
-        // Escuchar cambios en la base de datos (Ver lista)
-        function startKeysListener() {
-            const allKeysRef = ref(db, 'llaves');
-            onValue(allKeysRef, (snapshot) => {
-                const data = snapshot.val();
-                keysDisplay.innerHTML = "";
+        const GameController = {
+            index: 0,
+            startExperience() {
+                const ui = document.getElementById('experience-ui');
+                ui.style.display = 'block';
                 
-                if (!data) {
-                    keysDisplay.innerHTML = "No hay llaves.";
-                    return;
+                AudioSys.init();
+                AudioSys.playMusic();
+                this.createParticles();
+                
+                setTimeout(() => {
+                    document.getElementById('ui-progress').style.opacity = '1';
+                    this.nextMessage();
+                }, 1000);
+            },
+            createParticles() {
+                const container = document.getElementById('particles');
+                for (let i = 0; i < 30; i++) {
+                    const p = document.createElement('div');
+                    p.className = 'particle';
+                    p.style.left = Math.random() * 100 + 'vw';
+                    p.style.top = Math.random() * 100 + 'vh';
+                    p.style.animationDelay = Math.random() * 5 + 's';
+                    container.appendChild(p);
                 }
+            },
+            nextMessage() {
+                if (this.index < STORY_TEXTS.length) {
+                    const area = document.getElementById('message-area');
+                    const bubble = document.createElement('div');
+                    bubble.className = 'pixel-bubble';
+                    bubble.innerText = STORY_TEXTS[this.index];
+                    bubble.onclick = () => { AudioSys.playBloop(); bubble.style.color = "#ff6b81"; };
+                    
+                    area.appendChild(bubble);
+                    setTimeout(() => bubble.classList.add('visible'), 50);
 
-                // Convertir objeto a array y mostrar
-                Object.keys(data).forEach(key => {
-                    const info = data[key];
-                    const color = info.estado === 'activa' ? '#9AE8B7' : '#C61B24'; // Verde o Rojo
-                    keysDisplay.innerHTML += `<div style="color:${color}; margin-bottom:5px;">
-                        [${info.estado === 'activa' ? 'ACT' : 'USD'}] <b>${key}</b>
-                    </div>`;
-                });
-            });
-        }
+                    if (area.children.length > 3) {
+                        const first = area.children[0];
+                        first.style.opacity = '0';
+                        setTimeout(() => first.remove(), 500);
+                    }
 
+                    document.getElementById('progress-fill').style.width = ((this.index + 1) / STORY_TEXTS.length * 100) + "%";
+                    this.index++;
+                    setTimeout(() => this.nextMessage(), 3800);
+                } else {
+                    document.getElementById('next-stage-container').style.opacity = '1';
+                    document.getElementById('next-stage-container').style.pointerEvents = 'auto';
+                }
+            },
+            goToNextPhase() {
+                AudioSys.playBloop();
+                alert("Preparando Fase 3: Los Pensamientos...");
+            }
+        };
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
