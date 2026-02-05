@@ -210,6 +210,18 @@
         }
         .blink-text { animation: blink 1s infinite; margin-top: 20px; font-size: 1.2rem; }
         @keyframes blink { 50% { opacity: 0; } }
+    /* Efecto de TV antigua y Viñeta */
+body::after {
+    content: " ";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%), 
+                radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.3) 100%);
+    background-size: 100% 3px, 100% 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
     </style>
 </head>
 <body>
@@ -231,7 +243,7 @@
         </div>
         <div class="char-wrapper" id="char-yo">
             <div class="reaction-box" id="react-yo"></div>
-            <img class="pixel-char" src="https://raw.githubusercontent.com/Notes356/NotasParsMIRO/e643d2de9ed5e76f941ee538f8fd07d351823ccb/Im%C3%A1genesA/Yo_pixelart.webp" alt="Yo">
+            <img class="pixel-char" src="https://raw.githubusercontent.com/Notes356/NotasParsMIRO/43358b6d3df23269b45034ecec712fabccb46879/Fase5/Acto2/yo_normal_con_capucha.webp" alt="Yo">
         </div>
     </div>
 
@@ -549,5 +561,12 @@
             }, 2000);
         }
     </script>
+        <script type="module">
+        import { registrarPaso } from './telemetry.js';
+        registrarPaso("Fase 3: El Viaje");
+    </script>
+</body>
+</html>
+
 </body>
 </html>

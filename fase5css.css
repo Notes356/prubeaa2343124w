@@ -1,76 +1,64 @@
 /* =============================================================================
    1. VARIABLES GLOBALES (EL ALMA DEL JUEGO)
-   Aquí definimos la paleta de colores para cambiar todo el juego rápidamente.
    ============================================================================= */
 :root {
-    /* Paleta Celestial "Void" */
-    --c-void: #050510;         /* Negro profundo del espacio */
-    --c-sky-top: #0b0b2b;      /* Azul noche superior */
-    --c-sky-bot: #1a1a4a;      /* Azul noche inferior */
+    /* Paleta Celestial "Void" - Corregida para degradado suave */
+    --c-void: #050510;         
+    --c-sky-top: #0b0b2b;      
+    --c-sky-bot: #3a7bd5;      /* Azul atmosférico */
     
     /* Colores de Energía */
-    --c-glow: #00f2ff;         /* Cian eléctrico (Jugador/UI) */
-    --c-accent: #b33ce8;       /* Púrpura místico (Verdad) */
-    --c-danger: #ff0055;       /* Rojo (Si hubiera peligro) */
+    --c-glow: #00f2ff;         /* Cian eléctrico */
+    --c-accent: #b33ce8;       /* Púrpura místico */
+    --c-danger: #ff0055;       
     
     /* Textos y Bordes */
     --c-text: #e0e0ff;
-    --c-ui-bg: rgba(10, 10, 20, 0.9); /* Fondo semitransparente para diálogos */
+    --c-ui-bg: rgba(10, 10, 20, 0.9);
     
-    /* Fuentes (Deben coincidir con las importadas en HTML) */
+    /* Fuentes */
     --f-title: 'Press Start 2P', cursive;
     --f-text: 'VT323', monospace;
 }
 
 /* =============================================================================
-   2. RESET Y BASES (EL LIENZO)
-   Quitamos márgenes y preparamos la pantalla para que no se mueva.
+   2. RESET Y BASES
    ============================================================================= */
 * {
     box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent; /* Quita el azul al tocar en Android */
+    -webkit-tap-highlight-color: transparent;
 }
 
 body, html {
     margin: 0; padding: 0;
     width: 100%; height: 100%;
-    overflow: hidden; /* IMPORTANTE: Evita el scroll nativo del navegador */
+    overflow: hidden;
     background-color: var(--c-void);
     font-family: var(--f-title);
     color: var(--c-text);
-    user-select: none; /* El usuario no puede seleccionar texto */
+    user-select: none;
 }
 
 /* =============================================================================
-   3. EFECTOS DE POST-PROCESADO (LA ATMÓSFERA)
-   Capas que van encima de todo para dar look "Retro/Sueño".
+   3. EFECTOS DE ATMÓSFERA
    ============================================================================= */
-/* Rayas de monitor viejo (CRT) */
 .crt-scanlines {
     position: fixed; inset: 0; z-index: 900; pointer-events: none;
-    background: linear-gradient(
-        rgba(18, 16, 16, 0) 50%, 
-        rgba(0, 0, 0, 0.2) 50%
-    );
-    background-size: 100% 4px; /* Tamaño de la línea */
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+    background-size: 100% 4px;
 }
 
-/* Oscurecimiento en los bordes */
 .vignette-layer {
     position: fixed; inset: 0; z-index: 901; pointer-events: none;
-    background: radial-gradient(circle, transparent 50%, black 100%);
-    opacity: 0.8;
+    background: radial-gradient(circle, transparent 40%, black 100%);
+    opacity: 0.6;
 }
 
-/* Destello blanco (para transiciones o impactos) */
 .flash-overlay {
     position: fixed; inset: 0; z-index: 999; pointer-events: none;
-    background: white;
-    opacity: 0;
-    transition: opacity 0.2s;
+    background: white; opacity: 0; transition: opacity 0.2s;
 }
 
-/* Utilidad para ocultar cosas */
 .hidden { display: none !important; opacity: 0; }
 
 /* =============================================================================
@@ -82,13 +70,13 @@ body, html {
     display: flex; flex-direction: column; 
     justify-content: center; align-items: center;
     cursor: pointer;
-    transition: opacity 1s ease-out; /* Fade out suave al empezar */
+    transition: opacity 1s ease-out;
 }
 
 .intro-content h1 {
     color: var(--c-glow); font-size: 30px; margin: 0;
     text-shadow: 2px 2px 0 var(--c-accent);
-    animation: glitch 2s infinite; /* Efecto de error digital */
+    animation: glitch 2s infinite;
 }
 
 .intro-content h2 {
@@ -102,25 +90,27 @@ body, html {
 }
 
 /* =============================================================================
-   5. MUNDO DEL JUEGO (VIEWPORT)
-   Aquí es donde ocurre el scroll horizontal.
+   5. MUNDO DEL JUEGO
    ============================================================================= */
+#game-world {
+    /* Degradado corregido para eliminar el "corte azul" */
+    background: linear-gradient(to bottom, #050510 0%, #0b0b2b 30%, #1a1a4a 70%, #3a7bd5 100%);
+}
+
 #game-viewport {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     overflow: hidden;
 }
 
-/* --- CAPAS PARALLAX (FONDO) --- */
+/* --- FONDO PARALLAX --- */
 #bg-layer-1 {
-    /* Cielo Estrellado */
     position: absolute; inset: 0; z-index: 0;
-    background: linear-gradient(to bottom, var(--c-sky-top), var(--c-sky-bot));
+    background: transparent; /* Dejamos que se vea el game-world */
 }
-/* Generamos estrellas con CSS puro usando sombras múltiples para ahorrar memoria */
+
 #bg-layer-1::after {
     content: ''; position: absolute; width: 2px; height: 2px;
     background: white;
-    /* Sombras que simulan estrellas en posiciones aleatorias */
     box-shadow: 
         10vw 10vh #fff, 20vw 50vh #fff, 50vw 20vh #fff, 80vw 80vh #fff,
         15vw 90vh #fff, 90vw 10vh #fff, 40vw 40vh #fff, 70vw 60vh #fff;
@@ -128,93 +118,99 @@ body, html {
     animation: twinkle 4s infinite alternate;
 }
 
-/* --- PISTA DE JUEGO (TRACK) --- */
+/* --- PISTA Y SUELO --- */
 #world-track {
     position: absolute; bottom: 0; left: 0;
-    width: 4000px; /* EL MUNDO ES LARGO */
-    height: 100%;
-    z-index: 10;
-    /* La transformación (movimiento) se hará con JS */
-    will-change: transform; /* Optimización para móviles */
+    width: 4000px; height: 100%; z-index: 10;
+    will-change: transform;
 }
 
-/* Suelo brillante */
 .ground-line {
-    position: absolute; bottom: 0; left: 0; width: 100%; height: 100px;
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 120px;
     background: linear-gradient(to top, var(--c-sky-bot), transparent);
-    border-bottom: 2px solid var(--c-glow);
-    box-shadow: 0 0 50px rgba(0, 242, 255, 0.15); /* Resplandor azulado */
+    border-bottom: 4px solid var(--c-glow); /* Suelo más visible */
+    box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
 }
 
-/* Puntos en el suelo para dar sensación de velocidad */
 .ground-line::before {
     content: ''; position: absolute; bottom: 10px; left: 0; width: 100%; height: 2px;
     background-image: linear-gradient(90deg, var(--c-glow) 50%, transparent 50%);
-    background-size: 100px 100%;
-    opacity: 0.3;
+    background-size: 150px 100%; opacity: 0.3;
 }
 
-/* --- OBJETOS INTERACTIVOS (MONOLITOS) --- */
+/* --- CAMBIO: LAS CARTAS (Antes crystal-shard) --- */
 .interactive-zone {
-    position: absolute; bottom: 80px; width: 60px; height: 140px;
+    position: absolute; bottom: 140px; /* Más arriba para que no toquen el suelo */
+    width: 60px; height: 140px;
     display: flex; justify-content: center; align-items: center;
 }
 
+/* ESTO ES LO QUE ARREGLA LOS TRIÁNGULOS */
 .crystal-shard {
-    width: 30px; height: 100px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid var(--c-accent);
-    box-shadow: 0 0 15px var(--c-accent), inset 0 0 10px var(--c-accent);
-    transform: rotate(45deg); /* Rombo */
+    width: 50px; height: 70px; /* Forma de carta rectangular */
+    background: white;
+    border: 3px solid var(--c-glow);
+    border-radius: 6px; /* Bordes redondeados */
+    box-shadow: 0 0 20px var(--c-glow);
+    transform: rotate(0deg); /* SIN ROTACIÓN */
     animation: floatItem 3s infinite ease-in-out;
+    display: flex; justify-content: center; align-items: center;
 }
 
-/* Marcador "!" que flota sobre el objeto */
+/* Dibujamos un corazón dentro de la carta */
+.crystal-shard::after {
+    content: "❤";
+    color: var(--c-accent);
+    font-size: 24px;
+}
+
 .zone-marker {
-    position: absolute; top: -40px;
+    position: absolute; top: -50px;
     color: var(--c-glow); font-size: 20px;
     animation: bounceMarker 0.8s infinite alternate;
     text-shadow: 0 0 5px var(--c-glow);
-    display: none; /* Se activa con JS cuando estás cerca */
+    display: none;
 }
 
 /* --- NPC FINAL (YO) --- */
 #target-npc-container {
-    position: absolute; bottom: 80px; width: 80px;
+    position: absolute; bottom: 120px; width: 100px;
 }
 #npc-sprite {
     width: 100%; image-rendering: pixelated;
-    filter: grayscale(100%) brightness(1.5) drop-shadow(0 0 10px white);
-    opacity: 0.8;
+    filter: drop-shadow(0 0 10px white); opacity: 0.9;
 }
 .glow-aura {
     position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 100px; height: 20px;
+    width: 120px; height: 30px;
     background: radial-gradient(ellipse, white 0%, transparent 70%);
-    opacity: 0.3;
-    animation: pulseAura 2s infinite;
+    opacity: 0.4; animation: pulseAura 2s infinite;
 }
 
-/* --- JUGADOR (ELLA) --- */
+/* --- JUGADOR (ELLA) - CAMBIO DE TAMAÑO --- */
 #player-container {
-    position: absolute; bottom: 70px; left: 20%; /* Fija en pantalla visualmente */
-    width: 90px; height: 90px;
-    z-index: 50; /* Por encima del fondo */
-}
-#player-sprite {
-    width: 100%; height: 100%; object-fit: contain;
-    image-rendering: pixelated;
-    filter: drop-shadow(0 10px 5px rgba(0,0,0,0.5));
-    transition: transform 0.1s; /* Para girar rápido */
+    position: absolute; 
+    bottom: 110px; /* Ajustado al nuevo suelo */
+    left: 20%; 
+    width: 140px; /* ¡MÁS GRANDE! (Antes 105px) */
+    height: 140px;
+    z-index: 50;
+    transition: transform 0.1s;
 }
 
-/* Clase para animar caminata (se añade con JS) */
+#player-sprite {
+    width: 100%; height: 100%;
+    object-fit: contain; /* Asegura que se vea completa */
+    image-rendering: pixelated;
+    filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.5));
+}
+
 .anim-walking {
     animation: walkBob 0.4s infinite alternate ease-in-out;
 }
 
 /* =============================================================================
-   6. INTERFAZ DE USUARIO (HUD & CONTROLES)
+   6. INTERFAZ (HUD)
    ============================================================================= */
 #ui-hud {
     position: fixed; top: 0; left: 0; width: 100%; padding: 15px;
@@ -227,67 +223,40 @@ body, html {
     padding: 8px 12px; font-size: 10px; color: var(--c-text);
 }
 
-.hud-top-right {
-    display: flex; flex-direction: column; align-items: flex-end;
-}
-.collection-counter {
-    font-size: 10px; margin-bottom: 5px; color: var(--c-glow);
-    text-shadow: 0 0 5px var(--c-glow);
-}
-.progress-bar-frame {
-    width: 100px; height: 10px; border: 2px solid #fff; background: #222;
-}
-#progress-fill {
-    height: 100%; background: var(--c-accent);
-    box-shadow: 0 0 10px var(--c-accent);
-    transition: width 0.5s;
-}
+.hud-top-right { display: flex; flex-direction: column; align-items: flex-end; }
+.collection-counter { font-size: 12px; margin-bottom: 5px; color: var(--c-glow); }
+.progress-bar-frame { width: 120px; height: 12px; border: 2px solid #fff; background: #222; }
+#progress-fill { height: 100%; background: var(--c-accent); box-shadow: 0 0 10px var(--c-accent); transition: width 0.5s; }
 
-/* --- CAPA DE INTERACCIÓN --- */
 #interaction-layer {
     position: fixed; bottom: 0; left: 0; width: 100%; height: 100%;
-    z-index: 200; pointer-events: none; /* Deja pasar clicks al juego */
+    z-index: 200; pointer-events: none;
     display: flex; flex-direction: column; justify-content: flex-end;
 }
 
-/* Botón de Acción (LEER) */
 #action-btn {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    pointer-events: auto; /* Este sí recibe clicks */
-    background: rgba(0, 0, 0, 0.8);
-    color: var(--c-glow);
-    border: 2px solid var(--c-glow);
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0.9);
+    color: var(--c-glow); border: 2px solid var(--c-glow);
     font-family: var(--f-title); font-size: 16px;
     padding: 15px 30px; cursor: pointer;
     box-shadow: 0 0 20px var(--c-glow);
     animation: pulseBtn 1s infinite;
 }
 
-/* Caja de Diálogo RPG */
 #rpg-dialogue-box {
     pointer-events: auto;
     background: var(--c-ui-bg);
-    border-top: 4px solid var(--c-text);
-    border-bottom: 4px solid var(--c-text);
-    padding: 20px;
-    margin-bottom: 20px; /* Espacio para los controles */
-    min-height: 120px;
-    display: flex; flex-direction: column;
-    width: 90%; align-self: center; /* Centrado */
-    position: relative; top: -140px; /* Subirlo para no tapar controles */
+    border-top: 4px solid var(--c-text); border-bottom: 4px solid var(--c-text);
+    padding: 20px; margin-bottom: 20px; min-height: 120px;
+    display: flex; flex-direction: column; width: 90%; align-self: center;
+    position: relative; top: -140px;
 }
-.dialogue-header {
-    color: var(--c-accent); font-size: 12px; margin-bottom: 10px;
-}
-.dialogue-body {
-    font-family: var(--f-text); font-size: 22px; line-height: 1.2;
-}
-.dialogue-footer {
-    font-size: 10px; text-align: right; margin-top: 10px; 
-    animation: blink 1s infinite;
-}
+.dialogue-header { color: var(--c-accent); font-size: 12px; margin-bottom: 10px; }
+.dialogue-body { font-family: var(--f-text); font-size: 22px; line-height: 1.2; }
+.dialogue-footer { font-size: 10px; text-align: right; margin-top: 10px; animation: blink 1s infinite; }
 
-/* Controles Táctiles (D-PAD) */
 .touch-controls {
     position: fixed; bottom: 20px; width: 100%;
     display: flex; justify-content: space-between; padding: 0 30px;
@@ -296,34 +265,27 @@ body, html {
 .d-pad-btn {
     width: 70px; height: 70px;
     background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 50%;
     color: white; font-size: 24px;
     display: flex; justify-content: center; align-items: center;
     backdrop-filter: blur(4px);
-    transition: background 0.1s;
 }
 .d-pad-btn:active { background: rgba(255, 255, 255, 0.4); transform: scale(0.95); }
 
 /* =============================================================================
-   7. PANTALLA FINAL (ENDING)
+   7. PANTALLA FINAL
    ============================================================================= */
 #ending-overlay {
     position: fixed; inset: 0; background: black; z-index: 2000;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     text-align: center; color: white;
 }
-.heart-pulse {
-    font-size: 60px; color: var(--c-danger);
-    animation: beat 1.5s infinite;
-}
-.fade-in-text {
-    opacity: 0; animation: fadeIn 3s forwards;
-}
+.heart-pulse { font-size: 60px; color: var(--c-danger); animation: beat 1.5s infinite; }
+.fade-in-text { opacity: 0; animation: fadeIn 3s forwards; }
 .delay { animation-delay: 2s; }
 
 /* =============================================================================
-   8. ANIMACIONES (KEYFRAMES)
+   8. ANIMACIONES CORREGIDAS
    ============================================================================= */
 @keyframes glitch {
     0% { transform: translate(0); }
@@ -335,12 +297,16 @@ body, html {
 }
 @keyframes blink { 50% { opacity: 0; } }
 @keyframes twinkle { 0% { opacity: 0.3; } 100% { opacity: 1; } }
-@keyframes floatItem { 0%, 100% { transform: translateY(0) rotate(45deg); } 50% { transform: translateY(-15px) rotate(45deg); } }
+
+/* CORREGIDO: Ya no rota 45 grados, solo flota verticalmente */
+@keyframes floatItem { 
+    0%, 100% { transform: translateY(0); } 
+    50% { transform: translateY(-15px); } 
+}
+
 @keyframes bounceMarker { from { transform: translateY(0); } to { transform: translateY(-10px); } }
 @keyframes pulseAura { 0% { opacity: 0.2; transform: translateX(-50%) scale(1); } 50% { opacity: 0.5; transform: translateX(-50%) scale(1.2); } }
 @keyframes walkBob { from { transform: translateY(0); } to { transform: translateY(-6px); } }
 @keyframes pulseBtn { 0% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.1); } }
 @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 @keyframes fadeIn { to { opacity: 1; } }
-
-

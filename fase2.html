@@ -244,6 +244,17 @@
         .start-text { font-family: 'Press Start 2P'; font-size: 14px; color: var(--c-accent); animation: blink 1s infinite; margin-top: 20px;}
         
         @keyframes blink { 50% { opacity: 0; } }
+/* Efecto de TV antigua y Viñeta */
+body::after {
+    content: " ";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%), 
+                radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.3) 100%);
+    background-size: 100% 3px, 100% 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
 
     </style>
 </head>
@@ -501,5 +512,42 @@
         window.onload = () => GameController.checkAssets();
 
     </script>
+        <script type="module">
+        import { registrarPaso } from './telemetry.js';
+        registrarPaso("Fase 2: Conexión");
+    </script>
+</body>
+</html>
+<script>
+    function crearParticulas() {
+        const container = document.body;
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.style.position = 'fixed';
+            p.style.width = '2px';
+            p.style.height = '2px';
+            p.style.background = 'white';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.top = Math.random() * 100 + 'vh';
+            p.style.opacity = Math.random();
+            p.style.borderRadius = '50%';
+            p.style.pointerEvents = 'none';
+            container.appendChild(p);
+
+            // Animación simple de flotado
+            p.animate([
+                { transform: 'translateY(0) translateX(0)', opacity: 0 },
+                { opacity: 0.8, offset: 0.5 },
+                { transform: `translateY(-${Math.random() * 100 + 50}px) translateX(${Math.random() * 20 - 10}px)`, opacity: 0 }
+            ], {
+                duration: Math.random() * 3000 + 2000,
+                iterations: Infinity,
+                delay: Math.random() * 5000
+            });
+        }
+    }
+    crearParticulas();
+</script>
+
 </body>
 </html>
