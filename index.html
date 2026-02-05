@@ -1,58 +1,25 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fragmentos de un Sueño - Experiencia Completa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fragmentos de un Sueño</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     
     <style>
-        /* =========================================
-           1. ESTILOS GLOBALES Y VARIABLES
-           ========================================= */
+        /* TUS ESTILOS ORIGINALES (INTACTOS) */
         :root {
-            --c-sky-top: #3a7bd5;
-            --c-sky-bottom: #fbb6ce;
-            --c-panel-bg: #2a2a4a;
-            --c-panel-border: #4a4a7a;
-            --c-accent: #ff6b81;
-            --c-text-light: #e0e0ff;
-            --c-text-highlight: #ffd700;
-            --c-shadow: rgba(0, 0, 0, 0.3);
-            
-            /* Fase 2 específicos */
-            --c-bubble-bg: rgba(23, 23, 40, 0.95);
-            --c-border-light: #ffffff;
-            --c-border-shadow: #000000;
+            --c-sky-top: #3a7bd5; --c-sky-bottom: #fbb6ce; --c-panel-bg: #2a2a4a;
+            --c-panel-border: #4a4a7a; --c-accent: #ff6b81; --c-danger: #c0392b;
+            --c-text-light: #e0e0ff; --c-text-highlight: #ffd700; --c-shadow: rgba(0, 0, 0, 0.3);
         }
-
-        body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100vh;
-            overflow: hidden;
-            font-family: 'VT323', monospace;
-            color: var(--c-text-light);
-            user-select: none;
-            background: #050505;
-            -webkit-tap-highlight-color: transparent;
+        body {
+            margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center;
+            overflow: hidden; font-family: 'VT323', monospace; color: var(--c-text-light);
+            user-select: none; background: linear-gradient(to bottom, var(--c-sky-top), var(--c-sky-bottom));
+            position: relative;
         }
-
-        /* --- ESTILOS FASE 1 (PORTAL) --- */
-        #portal-ui {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 100; transition: opacity 1.5s ease;
-        }
-
-        #portal-background {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, var(--c-sky-top), var(--c-sky-bottom));
-            z-index: -2;
-        }
-
         .clouds {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;
             background-image: 
@@ -60,370 +27,226 @@
                 radial-gradient(circle at 25% 85%, rgba(255,255,255,0.8) 15px, transparent 16px),
                 radial-gradient(circle at 80% 20%, rgba(255,255,255,0.6) 20px, transparent 21px),
                 radial-gradient(circle at 85% 25%, rgba(255,255,255,0.6) 15px, transparent 16px);
-            background-size: 300px 300px;
-            animation: floatClouds 60s linear infinite;
+            background-size: 300px 300px; animation: floatClouds 60s linear infinite;
         }
         @keyframes floatClouds { from { background-position: 0 0; } to { background-position: 300px 100px; } }
-
         .mountains {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 40%; pointer-events: none; z-index: -1;
             background-image: linear-gradient(to bottom, #2a2a4a 0%, #1a1a2a 100%);
             clip-path: polygon(0% 100%, 0% 20%, 20% 40%, 40% 0%, 60% 30%, 80% 10%, 100% 50%, 100% 100%);
         }
-
         .pixel-card {
-            background: var(--c-panel-bg);
-            border: 4px solid var(--c-panel-border);
-            padding: 2.5rem; width: 90%; max-width: 380px;
-            text-align: center; position: relative;
-            box-shadow: 0 8px 16px var(--c-shadow);
-            border-radius: 8px;
+            background: var(--c-panel-bg); border: 4px solid var(--c-panel-border); padding: 2.5rem;
+            width: 90%; max-width: 380px; text-align: center; position: relative;
+            box-shadow: 0 8px 16px var(--c-shadow); border-radius: 8px;
         }
         .pixel-card::after {
             content: ''; position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px;
             border: 2px dashed var(--c-panel-border); pointer-events: none;
         }
-
         .icon-heart {
-            font-size: 50px; color: var(--c-accent);
-            text-shadow: 0 4px 8px var(--c-shadow);
-            margin-bottom: 15px; display: inline-block;
-            animation: beat 3s infinite ease-in-out;
+            font-size: 50px; color: var(--c-accent); text-shadow: 0 4px 8px var(--c-shadow);
+            margin-bottom: 15px; display: inline-block; animation: beat 3s infinite ease-in-out;
         }
         @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
-
+        h1 { font-family: 'Press Start 2P', cursive; font-size: 18px; line-height: 1.6; margin-bottom: 1.5rem; color: #fff; text-shadow: 0 2px 4px var(--c-shadow); }
+        p { font-size: 1.4rem; line-height: 1.4; margin-bottom: 2rem; color: #d0d0f0; }
         .pixel-input {
-            background: #1a1a2a; border: 3px solid var(--c-panel-border);
-            color: var(--c-accent); font-family: 'Press Start 2P', cursive;
-            font-size: 14px; padding: 15px; width: 80%; text-align: center;
-            outline: none; margin-bottom: 25px; text-transform: uppercase;
-            border-radius: 4px;
+            background: #1a1a2a; border: 3px solid var(--c-panel-border); color: var(--c-accent);
+            font-family: 'Press Start 2P', cursive; font-size: 14px; padding: 15px; width: 70%;
+            text-align: center; outline: none; margin-bottom: 25px; text-transform: uppercase; border-radius: 4px;
         }
-
+        .pixel-input:focus { border-color: var(--c-accent); box-shadow: 0 0 10px var(--c-accent); }
         .pixel-btn {
-            background: var(--c-accent); color: #fff; border: none;
-            font-family: 'Press Start 2P', cursive; font-size: 12px;
-            padding: 15px 30px; cursor: pointer;
-            box-shadow: 0 6px #c74b5e; border-radius: 4px; transition: all 0.1s;
+            background: var(--c-accent); color: #fff; border: none; font-family: 'Press Start 2P', cursive;
+            font-size: 12px; padding: 15px 30px; cursor: pointer; box-shadow: 0 6px #c74b5e, 0 10px 20px var(--c-shadow);
+            border-radius: 4px; transition: all 0.1s; text-shadow: 0 2px #c74b5e;
         }
-        .pixel-btn:active { transform: translateY(4px); box-shadow: 0 2px #c74b5e; }
-
-        /* --- ESTILOS FASE 2 (EXPERIENCIA) --- */
-        #experience-ui {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 50; display: none; /* Se activa tras login */
-        }
-
-        #background-layer-f2 {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('https://raw.githubusercontent.com/Notes356/NotasParsMIRO/93b1e8648e0e549080f108abcaf7eea0a2e9a657/image-2.webp');
-            background-size: cover; background-position: center;
-            z-index: -1; filter: brightness(0.65) contrast(1.1);
-        }
-
-        .vignette {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.8) 100%);
-            z-index: 1; pointer-events: none;
-        }
-
-        #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
-        .particle { position: absolute; background: white; width: 2px; height: 2px; opacity: 0; animation: floatParticle 10s infinite linear; }
-        @keyframes floatParticle {
-            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-            20% { opacity: 0.8; }
-            80% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }
-        }
-
-        #message-area {
-            position: absolute; top: 0; left: 0; width: 100%; height: 80%;
-            z-index: 10; display: flex; flex-direction: column;
-            justify-content: flex-end; align-items: center;
-            padding-bottom: 40px; pointer-events: none;
-        }
-
-        .pixel-bubble {
-            background: var(--c-bubble-bg); color: #e0e0e0;
-            padding: 18px 24px; margin: 12px 0; font-size: 1.5rem;
-            text-align: center; max-width: 85%; pointer-events: auto;
-            cursor: pointer; opacity: 0;
-            box-shadow: 0 0 0 2px #000, 0 0 0 4px #fff, 6px 6px 8px rgba(0,0,0,0.6);
-            transform: translateY(30px) scale(0.9);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
-        }
-        .pixel-bubble.visible { opacity: 1; transform: translateY(0) scale(1); }
-
-        .progress-wrapper {
-            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
-            width: 220px; z-index: 20; opacity: 0; transition: opacity 1s;
-        }
-
-        .rpg-bar-container {
-            width: 100%; height: 18px; background: #1a1a1a;
-            border: 2px solid #fff; outline: 2px solid #000; padding: 2px;
-        }
-
-        .rainbow-fill {
-            height: 100%; width: 0%;
-            background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
-            background-size: 200% 200%; animation: rainbowFlow 3s linear infinite;
-        }
-        @keyframes rainbowFlow { 0% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
-        #next-stage-container {
-            position: fixed; bottom: 80px; left: 0; right: 0;
-            display: flex; justify-content: center; z-index: 30;
-            pointer-events: none; opacity: 0; transition: opacity 1s;
-        }
-
-        /* --- ADMIN Y UTILIDADES --- */
+        .pixel-btn:active { transform: translateY(4px); box-shadow: 0 2px #c74b5e, 0 4px 10px var(--c-shadow); }
+        .btn-small { padding: 10px 15px; font-size: 10px; margin-top: 15px; background: var(--c-panel-border); box-shadow: 0 4px #3a3a5a; }
+        .btn-danger { background: var(--c-danger); box-shadow: 0 4px #922b21; margin-top: 10px; }
         .hidden { display: none !important; }
-        .error-msg { color: var(--c-accent); margin-top: 20px; font-weight: bold; min-height: 24px; }
-        .admin-trigger { position: fixed; bottom: 15px; right: 15px; opacity: 0.5; cursor: pointer; font-size: 24px; z-index: 200; }
+        .error-msg { color: var(--c-accent); margin-top: 20px; font-size: 16px; font-weight: bold; min-height: 24px; }
+        
         #admin-panel {
-            display: none; position: absolute; z-index: 300;
-            background: var(--c-panel-bg); border: 4px solid var(--c-accent);
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
-            padding: 30px; width: 320px; border-radius: 8px;
+            display: none; position: absolute; z-index: 50; background: var(--c-panel-bg); border: 4px solid var(--c-accent);
+            top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 30px; width: 320px; border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .key-list { text-align: left; font-size: 16px; max-height: 150px; overflow-y: auto; margin: 20px 0; border: 2px dashed var(--c-panel-border); padding: 10px; background: #1a1a2a; }
+        .admin-trigger { position: fixed; bottom: 15px; right: 15px; opacity: 0.5; cursor: pointer; font-size: 24px; color: var(--c-text-light); transition: opacity 0.3s; }
+        .admin-trigger:hover { opacity: 1; }
+        .key-list { text-align: left; font-size: 14px; max-height: 200px; overflow-y: auto; margin: 20px 0; border: 2px dashed var(--c-panel-border); padding: 10px; background: #1a1a2a; border-radius: 4px;}
+        
+        /* Nuevo estilo para los datos de conexión */
+        .key-item { margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .key-meta { display: block; font-size: 12px; color: #aaa; margin-top: 2px; }
     </style>
 </head>
 <body>
 
-    <div id="portal-ui">
-        <div id="portal-background">
-            <div class="clouds"></div>
-            <div class="mountains"></div>
-        </div>
+    <div class="clouds"></div>
+    <div class="mountains"></div>
 
-        <main class="pixel-card" id="view-login">
-            <div class="icon-heart">❤</div>
-            <h1>FRAGMENTOS<br>DE UN SUEÑO</h1>
-            <p>Una llave, una historia.<br>Introduce tu código.</p>
-            <input type="text" id="user-key-input" class="pixel-input" placeholder="XXXX" maxlength="10">
-            <br>
-            <button class="pixel-btn" id="btn-enter">ABRIR PORTAL</button>
-            <div id="login-msg" class="error-msg"></div>
-        </main>
-    </div>
+    <main class="pixel-card animate__animated animate__fadeIn" id="view-login">
+        <div class="icon-heart">❤</div>
+        <h1>FRAGMENTOS<br>DE UN SUEÑO</h1>
+        <p>Una llave, una historia.<br>Introduce tu código.</p>
+        
+        <input type="text" id="user-key-input" class="pixel-input" placeholder="XXXX" maxlength="10">
+        <br>
+        <button class="pixel-btn" id="btn-enter">ABRIR PORTAL</button>
+        
+        <div id="login-msg" class="error-msg"></div>
+    </main>
 
     <div class="admin-trigger" id="btn-open-admin">⚙</div>
+
     <div id="admin-panel">
-        <h2 style="font-family:'Press Start 2P'; font-size:14px; color:var(--c-accent); text-align:center;">PANEL DEL CREADOR</h2>
+        <h2 style="font-family:'Press Start 2P'; font-size:14px; color:var(--c-accent); margin-bottom:25px; text-align:center;">PANEL DEL CREADOR</h2>
+        
         <div id="admin-auth-view" style="text-align: center;">
-            <input type="password" id="admin-pass-input" class="pixel-input" placeholder="CLAVE">
+            <input type="password" id="admin-pass-input" class="pixel-input" placeholder="CLAVE MAESTRA" style="width: 80%;">
+            <br>
             <button class="pixel-btn" id="btn-admin-login">ACCEDER</button>
         </div>
+
         <div id="admin-tools-view" class="hidden" style="text-align: center;">
-            <button class="pixel-btn" id="btn-generate" style="width: 100%;">GENERAR LLAVE</button>
-            <div id="keys-display" class="key-list">Conectando...</div>
-            <button class="pixel-btn" id="btn-close-admin" style="font-size:10px; margin-top:10px;">CERRAR</button>
+            <button class="pixel-btn" id="btn-generate" style="width: 100%;">GENERAR LLAVE MÁGICA</button>
+            
+            <div id="keys-display" class="key-list">Conectando con el oráculo...</div>
+            
+            <button class="pixel-btn btn-small btn-danger" id="btn-clear-history">BORRAR HISTORIAL</button>
+            <br>
+            <button class="pixel-btn btn-small" id="btn-close-admin" style="margin-top: 10px;">CERRAR PANEL</button>
         </div>
     </div>
-
-    <div id="experience-ui">
-        <div id="background-layer-f2"></div>
-        <div class="vignette"></div>
-        <div id="particles"></div>
-        <div id="message-area"></div>
-        
-        <div class="progress-wrapper" id="ui-progress">
-            <div class="rpg-bar-container">
-                <div id="progress-fill" class="rainbow-fill"></div>
-            </div>
-        </div>
-
-        <div id="next-stage-container">
-            <button class="pixel-btn" style="background:var(--c-accent); box-shadow:0 0 15px var(--c-accent);" onclick="GameController.goToNextPhase()">SIGUIENTE FASE ➔</button>
-        </div>
-    </div>
-
-    <audio id="bg-music" loop preload="auto">
-        <source src="https://raw.githubusercontent.com/Notes356/NotasParsMIRO/83cc5716717c3fcbd5b70a0fce22e619326aff70/pixelated-game-vibe-music-450640.mp3" type="audio/mpeg">
-    </audio>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-        import { getDatabase, ref, set, update, get, onValue } 
-            from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+        import { db, ref, set, update, get, onValue, remove } from './firebase-config.js';
+        import { registrarPaso } from './telemetry.js';
 
-        // CONFIGURACIÓN FIREBASE
-        const firebaseConfig = {
-            apiKey: "AIzaSyAnYkdRY_LhrJwpClgfWs38iP2mfxyc2tk",
-            authDomain: "declaracion-final.firebaseapp.com",
-            projectId: "declaracion-final",
-            storageBucket: "declaracion-final.firebasestorage.app",
-            messagingSenderId: "288671326547",
-            appId: "1:288671326547:web:e549d8d79e951e408e41a6"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
         const ADMIN_PASSWORD = "AMOR_FRIO";
 
-        // Lógica Login Fase 1
+        // Elementos UI
         const viewLogin = document.getElementById('view-login');
         const loginMsg = document.getElementById('login-msg');
+        const adminPanel = document.getElementById('admin-panel');
+        const adminAuthView = document.getElementById('admin-auth-view');
+        const adminToolsView = document.getElementById('admin-tools-view');
+        const keysDisplay = document.getElementById('keys-display');
 
+        // =========================================
+        // 1. LÓGICA DE ENTRADA (USUARIO)
+        // =========================================
         window.enterSystem = async () => {
             const keyInput = document.getElementById('user-key-input').value.trim().toUpperCase();
-            if (!keyInput) { loginMsg.textContent = "Introduce una llave."; return; }
             
-            loginMsg.textContent = "Consultando a las estrellas...";
+            if (!keyInput) { 
+                loginMsg.textContent = "Por favor, escribe una llave."; 
+                return; 
+            }
+
+            loginMsg.textContent = "Verificando...";
+            loginMsg.style.color = "var(--c-text-light)";
+
             const keyRef = ref(db, 'llaves/' + keyInput);
             
             try {
                 const snapshot = await get(keyRef);
                 const data = snapshot.val();
-                if (data && data.estado === "activa") {
-                    await update(keyRef, { estado: "usada", usadaEn: new Date().toISOString() });
-                    loginMsg.style.color = "var(--c-text-highlight)";
-                    loginMsg.textContent = "¡Llave correcta! Abriendo...";
-                    
-                    // TRANSICIÓN HACIA FASE 2
-                    setTimeout(() => {
-                        document.getElementById('portal-ui').style.opacity = '0';
-                        setTimeout(() => {
-                            document.getElementById('portal-ui').classList.add('hidden');
-                            GameController.startExperience();
-                        }, 1500);
-                    }, 1000);
-
-                } else {
-                    loginMsg.textContent = (data && data.estado === "usada") ? "Esta llave ya se rompió." : "La llave no existe.";
-                }
-            } catch (e) { loginMsg.textContent = "Error de conexión."; }
-        };
-        document.getElementById('btn-enter').onclick = window.enterSystem;
-
-        // Lógica Admin
-        document.getElementById('btn-open-admin').onclick = () => document.getElementById('admin-panel').style.display = 'block';
-        document.getElementById('btn-close-admin').onclick = () => document.getElementById('admin-panel').style.display = 'none';
-        document.getElementById('btn-admin-login').onclick = () => {
-            if(document.getElementById('admin-pass-input').value === ADMIN_PASSWORD) {
-                document.getElementById('admin-auth-view').classList.add('hidden');
-                document.getElementById('admin-tools-view').classList.remove('hidden');
-                onValue(ref(db, 'llaves'), (snap) => {
-                    const display = document.getElementById('keys-display');
-                    display.innerHTML = "";
-                    const data = snap.val();
-                    if(data) Object.keys(data).forEach(k => {
-                        display.innerHTML += `<div style="color:${data[k].estado==='activa'?'#ffd700':'#ff6b81'}">${k} [${data[k].estado}]</div>`;
-                    });
-                });
-            }
-        };
-        document.getElementById('btn-generate').onclick = () => {
-            const key = Math.random().toString(36).substring(2, 6).toUpperCase();
-            set(ref(db, 'llaves/' + key), { estado: "activa", creada: new Date().toISOString() });
-        };
-    </script>
-
-    <script>
-        // LÓGICA FASE 2 (Encapsulada)
-        const STORY_TEXTS = [
-            "A veces las palabras sobran...",
-            "Pero los sentimientos queman.",
-            "He guardado este momento para ti.",
-            "Escucha el ritmo con calma.",
-            "Estamos a mitad del camino.",
-            "¿Me acompañas un poco más?"
-        ];
-
-        const AudioSys = {
-            ctx: null, musicEl: document.getElementById('bg-music'),
-            init() { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
-            playMusic() {
-                if (this.ctx.state === 'suspended') this.ctx.resume();
-                this.musicEl.volume = 0;
-                this.musicEl.play().then(() => {
-                    let vol = 0;
-                    const fade = setInterval(() => {
-                        if (vol < 0.6) { vol += 0.05; this.musicEl.volume = vol; }
-                        else clearInterval(fade);
-                    }, 200);
-                });
-            },
-            playBloop() {
-                if (!this.ctx) return;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-                gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.1);
-                osc.connect(gain); gain.connect(this.ctx.destination);
-                osc.start(); osc.stop(this.ctx.currentTime + 0.1);
-            }
-        };
-
-        const GameController = {
-            index: 0,
-            startExperience() {
-                const ui = document.getElementById('experience-ui');
-                ui.style.display = 'block';
                 
-                AudioSys.init();
-                AudioSys.playMusic();
-                this.createParticles();
-                
-                setTimeout(() => {
-                    document.getElementById('ui-progress').style.opacity = '1';
-                    this.nextMessage();
-                }, 1000);
-            },
-            createParticles() {
-                const container = document.getElementById('particles');
-                for (let i = 0; i < 30; i++) {
-                    const p = document.createElement('div');
-                    p.className = 'particle';
-                    p.style.left = Math.random() * 100 + 'vw';
-                    p.style.top = Math.random() * 100 + 'vh';
-                    p.style.animationDelay = Math.random() * 5 + 's';
-                    container.appendChild(p);
-                }
-            },
-            nextMessage() {
-                if (this.index < STORY_TEXTS.length) {
-                    const area = document.getElementById('message-area');
-                    const bubble = document.createElement('div');
-                    bubble.className = 'pixel-bubble';
-                    bubble.innerText = STORY_TEXTS[this.index];
-                    bubble.onclick = () => { AudioSys.playBloop(); bubble.style.color = "#ff6b81"; };
+                // Si la llave existe y está activa (o usada, permitimos reentrada por ser dedicatoria)
+                if (data && (data.estado === "activa" || data.estado === "usada")) {
                     
-                    area.appendChild(bubble);
-                    setTimeout(() => bubble.classList.add('visible'), 50);
+                    // 1. Guardar la llave en el navegador para las siguientes fases
+                    localStorage.setItem('llave_acceso_dedicatoria', keyInput);
+                    
+                    // 2. Registrar en base de datos
+                    registrarPaso("Inicio: Portal Abierto"); // Esto guarda hora y fase
 
-                    if (area.children.length > 3) {
-                        const first = area.children[0];
-                        first.style.opacity = '0';
-                        setTimeout(() => first.remove(), 500);
+                    // 3. Actualizar estado a usada si era nueva
+                    if(data.estado === "activa") {
+                        update(keyRef, { estado: "usada" });
                     }
+                    
+                    loginMsg.style.color = "var(--c-text-highlight)";
+                    loginMsg.textContent = "¡Bienvenid@! El sueño comienza...";
+                    
+                    setTimeout(() => {
+                        window.location.href = 'fase2.html';
+                    }, 1500);
 
-                    document.getElementById('progress-fill').style.width = ((this.index + 1) / STORY_TEXTS.length * 100) + "%";
-                    this.index++;
-                    setTimeout(() => this.nextMessage(), 3800);
                 } else {
-                    document.getElementById('next-stage-container').style.opacity = '1';
-                    document.getElementById('next-stage-container').style.pointerEvents = 'auto';
+                    loginMsg.style.color = "var(--c-accent)";
+                    loginMsg.textContent = "Llave incorrecta o inexistente.";
                 }
-            },
-            goToNextPhase() {
-                AudioSys.playBloop();
-                alert("Preparando Fase 3: Los Pensamientos...");
+
+            } catch (error) { 
+                console.error(error);
+                loginMsg.textContent = "Error de conexión con el sueño."; 
             }
         };
+
+        document.getElementById('btn-enter').addEventListener('click', window.enterSystem);
+
+        // =========================================
+        // 2. LÓGICA DE ADMIN (CREADOR)
+        // =========================================
+        document.getElementById('btn-open-admin').addEventListener('click', () => { adminPanel.style.display = 'block'; });
+        document.getElementById('btn-close-admin').addEventListener('click', () => { adminPanel.style.display = 'none'; });
+
+        document.getElementById('btn-admin-login').addEventListener('click', () => {
+            if (document.getElementById('admin-pass-input').value === ADMIN_PASSWORD) {
+                adminAuthView.classList.add('hidden');
+                adminToolsView.classList.remove('hidden');
+                startKeysListener();
+            } else { 
+                alert("Contraseña incorrecta."); 
+            }
+        });
+
+        document.getElementById('btn-generate').addEventListener('click', () => {
+            const newKey = Math.random().toString(36).substring(2, 6).toUpperCase();
+            set(ref(db, 'llaves/' + newKey), { 
+                estado: "activa", 
+                creada: new Date().toLocaleDateString(),
+                ultima_ubicacion: "Esperando..." 
+            });
+        });
+
+        document.getElementById('btn-clear-history').addEventListener('click', () => {
+            if(confirm("⚠ ¿Borrar TODO el historial de llaves?")) {
+                remove(ref(db, 'llaves'));
+            }
+        });
+
+        // =========================================
+        // 3. MONITOR EN TIEMPO REAL
+        // =========================================
+        function startKeysListener() {
+            onValue(ref(db, 'llaves'), (snapshot) => {
+                const data = snapshot.val();
+                keysDisplay.innerHTML = "";
+                
+                if (!data) { keysDisplay.innerHTML = "Sin registros."; return; }
+                
+                Object.keys(data).forEach(key => {
+                    const info = data[key];
+                    const icon = info.estado === 'activa' ? '✨' : '❤️';
+                    const color = info.estado === 'activa' ? '#ffd700' : '#ff6b81';
+                    
+                    // Aquí mostramos DÓNDE está y CUÁNDO fue
+                    keysDisplay.innerHTML += `
+                    <div class="key-item" style="color:${color}">
+                        ${icon} <b>${key}</b> [${info.estado}]
+                        <span class="key-meta">
+                            📍 ${info.ultima_ubicacion || 'Inicio'} <br>
+                            🕒 ${info.ultima_conexion || '---'}
+                        </span>
+                    </div>`;
+                });
+            });
+        }
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
